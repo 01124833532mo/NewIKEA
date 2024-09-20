@@ -29,7 +29,15 @@ namespace Link.Dev.IKEA.BLL.Services.Departments
                 /// 	Description = department.Description,
                 /// 	CreationDate = department.CreationDate,
                 /// };
-                yield return (DepartmentToReturnDto)Departments;
+                //yield return (DepartmentToReturnDto)Departments;
+                yield return new DepartmentToReturnDto
+                {
+                    Id = department.Id,
+                    Code = department.Code,
+                    Name = department.Name,
+                    Description = department.Description,
+                    CreationDate = department.CreationDate,
+                };
             }
         }
         public IEnumerable<DepartmentToReturnDto> GetAllDepartmentsIQueryable()
@@ -72,7 +80,7 @@ namespace Link.Dev.IKEA.BLL.Services.Departments
                 CreationDate = DepartmentDto.CreationDate,
                 CreatedBy = 1,
                 LastModifiedBy = 1,
-                LastModifiedOn = DepartmentDto.LastModifiedOn,
+                //LastModifiedOn = DepartmentDto.LastModifiedOn,
             };
             return _departmentRepository.Add(department);
         }
