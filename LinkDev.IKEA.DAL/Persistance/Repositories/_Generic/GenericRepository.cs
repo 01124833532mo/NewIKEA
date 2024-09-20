@@ -21,9 +21,9 @@ namespace LinkDev.IKEA.DAL.Persistance.Repositories._Generic
 		{
 			if (AsNoTraking)
 			{
-				return _dbContext.Set<T>().AsNoTracking().ToList();
+				return _dbContext.Set<T>().Where(d=>!d.IsDeleted).AsNoTracking().ToList();
 			}
-			return _dbContext.Set<T>().ToList();
+			return _dbContext.Set<T>().Where(d => !d.IsDeleted).ToList();
 		}
 		public T? GetById(int id)
 		{
@@ -49,7 +49,8 @@ namespace LinkDev.IKEA.DAL.Persistance.Repositories._Generic
 		}
 		public int Delete(T entity)
 		{
-			_dbContext.Set<T>().Remove(entity);
+			entity.IsDeleted = true;
+			_dbContext.Set<T>().Update(entity);
 			return _dbContext.SaveChanges();
 		}
 	}
