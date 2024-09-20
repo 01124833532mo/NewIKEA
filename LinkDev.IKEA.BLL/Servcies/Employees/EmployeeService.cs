@@ -20,7 +20,7 @@ namespace LinkDev.IKEA.BLL.Servcies.Employees
         {
 			_employeeRepository = employeeRepository;
 		}
-        public int CreateDepartment(CreatedEmployeeDto employeeDto)
+        public int CreateEmploye(CreatedEmployeeDto employeeDto)
 		{
 
 			var employee = new Employee()
@@ -45,7 +45,7 @@ namespace LinkDev.IKEA.BLL.Servcies.Employees
 
 		}
 
-		public bool DeleteDepartment(int id)
+		public bool DeleteEmploye(int id)
 		{
 			var employee = _employeeRepository.GetById(id);
 if(employee is { })
@@ -56,7 +56,7 @@ if(employee is { })
 return false;
 		}
 
-		public IEnumerable<EmployeeToReturnDto> GetAllDepartments()
+		public IEnumerable<EmployeeToReturnDto> GetAllEmployes()
 		{
 			return _employeeRepository.GetAllAsIQueryable().Select(emploee => new EmployeeToReturnDto
 			{
@@ -68,14 +68,14 @@ return false;
 				Salary = emploee.Salary,
 				Email = emploee.Email,
 			
-				Gender = nameof(emploee.Gender),
-				EmployeeType = nameof(emploee.EmployeeType),
+				Gender = emploee.Gender.ToString(),
+				EmployeeType = emploee.EmployeeType.ToString() ,
 			
 			});
 
 		}
 
-		public EmployeeDetailsToReturnDto? GetDepartmentsById(int id)
+		public EmployeeDetailsToReturnDto? GetEmployesById(int id)
 		{
 		var emploee = _employeeRepository.GetById(id); ;
 			if(emploee is { })
@@ -100,7 +100,7 @@ return false;
 			}
 		}
 
-		public int UpdateDepartment(UpdatedEmployeeDto employeeDto)
+		public int UpdateEmploye(UpdatedEmployeeDto employeeDto)
 		{
 			var employee = new Employee()
 			{

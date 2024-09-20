@@ -8,16 +8,16 @@ using System.Threading.Tasks;
 
 namespace LinkDev.IKEA.BLL.Servcies.Employees
 {
-	internal interface IEmployesService
+	public interface IEmployesService
 	{
-		IEnumerable<EmployeeToReturnDto> GetAllDepartments();
+		IEnumerable<EmployeeToReturnDto> GetAllEmployes();
 
-	EmployeeDetailsToReturnDto? GetDepartmentsById(int id);
+	EmployeeDetailsToReturnDto? GetEmployesById(int id);
 
-		int CreateDepartment(CreatedEmployeeDto departmentDto);
+		int CreateEmploye(CreatedEmployeeDto departmentDto);
 
-		int UpdateDepartment(UpdatedEmployeeDto DepartmentDto);
+		int UpdateEmploye(UpdatedEmployeeDto DepartmentDto);
 
-		bool DeleteDepartment(int id);
+		bool DeleteEmploye(int id);
 	}
 }
