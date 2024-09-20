@@ -8,23 +8,23 @@ using System.Text;
 using System.Threading.Tasks;
 namespace Link.Dev.IKEA.DAL.Data
 {
-    internal class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : DbContext
     {
-        public ApplicationDbContext() : base()
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
 
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer("Server = .; Database = NewIKEA; Trusted_Connection = True; TrustServerCertificate = True");
-        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseSqlServer("Server = .; Database = NewIKEA; Trusted_Connection = True; TrustServerCertificate = True");
+        //}
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
-        DbSet<Department> Departments { get; set; }
+       public DbSet<Department> Departments { get; set; }
     }
 }

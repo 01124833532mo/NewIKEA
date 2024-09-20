@@ -17,7 +17,7 @@ namespace Link.Dev.IKEA.DAL.Data.Configurations
             builder.Property(d => d.Name).HasColumnType("varchar(50)").IsRequired();
             builder.Property(d => d.CreatedOn).HasDefaultValueSql("GETDATE()");
             //builder.Property(d => d.CreatedBy).HasDefaultValueSql("");
-            builder.Property(d => d.LastModifiedOn).HasDefaultValueSql("GETEDATE()");
+            builder.Property(d => d.LastModifiedOn).HasDefaultValueSql("GETDATE()");
             //builder.Property(d => d.LastModifiedBy).HasDefaultValueSql("");
         }
     }
