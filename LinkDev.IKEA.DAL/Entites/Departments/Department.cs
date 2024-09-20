@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Link.Dev.IKEA.DAL.Models;
+using Link.Dev.IKEA.DAL.Entites;
 
-namespace LinkDev.IKEA.DAL.Models.Departments
+namespace LinkDev.IKEA.DAL.Entites.Departments
 {
     public class Department : ModelBase
     {

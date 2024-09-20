@@ -1,5 +1,5 @@
 ﻿using Link.Dev.IKEA.DAL.Data;
-using LinkDev.IKEA.DAL.Models.Departments;
+using LinkDev.IKEA.DAL.Entites.Departments;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 namespace Link.Dev.IKEA.DAL.Persistence.Repositories.Departments
 {
-    internal class DepartmentRepository : IDepartmentRepository
+    public class DepartmentRepository : IDepartmentRepository
     {
         private readonly ApplicationDbContext _dbContext;
         public DepartmentRepository(ApplicationDbContext dbContext)
@@ -30,6 +30,10 @@ namespace Link.Dev.IKEA.DAL.Persistence.Repositories.Departments
             ///	department = _dbContext.Departments.FirstOrDefault(d => d.Id == id);
             ///return department;
             return _dbContext.Departments.Find(id);
+        }
+        public IQueryable<Department> GetAllAsIQueryable()
+        {
+            return _dbContext.Departments;
         }
         public int Add(Department entity)
         {

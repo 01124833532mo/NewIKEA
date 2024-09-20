@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-namespace Link.Dev.IKEA.DAL.Models
+namespace Link.Dev.IKEA.DAL.Entites
 {
     public class ModelBase
     {
