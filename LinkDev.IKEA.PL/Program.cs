@@ -1,3 +1,4 @@
+using Link.Dev.IKEA.BLL.Services.Departments;
 using Link.Dev.IKEA.DAL.Data;
 using Link.Dev.IKEA.DAL.Persistence.Repositories.Departments;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,7 @@ namespace LinkDev.IKEA.PL
             });
             //
             builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            builder.Services.AddScoped<IDepratmentService, DepartmentService>();
 
             var app = builder.Build();
 
