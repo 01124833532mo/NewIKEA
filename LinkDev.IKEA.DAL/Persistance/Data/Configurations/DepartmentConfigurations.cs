@@ -1,4 +1,4 @@
-﻿using Link.Dev.IKEA.DAL.Models;
+﻿using LinkDev.IKEA.DAL.Models.Departments;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
