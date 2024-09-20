@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-namespace Link.Dev.IKEA.DAL.Data.Configurations
+namespace LinkDev.IKEA.DAL.Persistance.Data.Configurations.Departments
 {
     internal class DepartmentConfigurations : IEntityTypeConfiguration<Department>
     {
