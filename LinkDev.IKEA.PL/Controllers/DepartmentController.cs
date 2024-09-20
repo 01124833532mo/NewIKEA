@@ -146,8 +146,48 @@ namespace LinkDev.IKEA.PL.Controllers
             ModelState.AddModelError(string.Empty, message);
             return View(departmentVm);
         }
+        //[HttpGet]
+        //public IActionResult Delete(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return BadRequest();
+        //    }
+        //    var department = _depratmentService.GetDepartmentsById(id.Value);
+        //    if (department == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return View(department);
+        //}
+        [HttpPost]
 
+        public IActionResult Delete(int id)
+        {
+            var message = string.Empty;
 
+            try
+            {
+                var deleted = _depratmentService.DeleteDepartment(id);
+                if (deleted)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                message = "an error has occured during deleting the department";
+            }
+            catch (Exception ex)
+            {
 
+                _logger.LogError(ex, ex.Message);
+
+                message = _webHostEnvironment.IsDevelopment() ? ex.Message : "an error has occured during deleting the department";
+            }
+            //ModelState.AddModelError(string.Empty, message);
+
+            // shoud use torser and use tempedata[]
+            return RedirectToAction(nameof(Index));
+
+        }
+        
     }
 }
