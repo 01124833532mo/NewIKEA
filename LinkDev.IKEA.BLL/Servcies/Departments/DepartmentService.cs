@@ -93,11 +93,15 @@ namespace Link.Dev.IKEA.BLL.Services.Departments
                 Name = DepartmentDto.Name,
                 Description = DepartmentDto.Description,
                 CreationDate = DepartmentDto.CreationDate,
-                CreatedBy = 1,
-                LastModifiedBy = 1,
-                LastModifiedOn = DepartmentDto.LastModifiedOn,
+                //CreatedBy = 1,
+                //LastModifiedBy = 1,
+                //LastModifiedOn = DepartmentDto.LastModifiedOn,
+
+
+
             };
             return _departmentRepository.Update(department);
+
         }
         public bool DeleteDepartment(int id)
         {
