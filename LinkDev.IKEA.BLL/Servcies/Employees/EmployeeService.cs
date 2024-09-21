@@ -58,7 +58,7 @@ return false;
 
 		public IEnumerable<EmployeeToReturnDto> GetAllEmployes()
 		{
-			return _employeeRepository.GetAllAsIQueryable().Select(emploee => new EmployeeToReturnDto
+			return _employeeRepository.GetAllAsIQueryable().Where(e=>!e.IsDeleted).Select(emploee => new EmployeeToReturnDto
 			{
 
 				Id = emploee.Id,
@@ -71,7 +71,7 @@ return false;
 				Gender = emploee.Gender.ToString(),
 				EmployeeType = emploee.EmployeeType.ToString() ,
 			
-			});
+			}).ToList();
 
 		}
 
@@ -81,6 +81,7 @@ return false;
 			if(emploee is { })
 			{
 				return new EmployeeDetailsToReturnDto(){
+					Id=emploee.Id,
 					Name = emploee.Name,
 				Age = emploee.Age,
 				Adress = emploee.Adress,

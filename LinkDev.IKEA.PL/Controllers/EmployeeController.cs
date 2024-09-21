@@ -67,7 +67,7 @@ namespace LinkDev.IKEA.PL.Controllers
 				}
 			}
 		}
-
+		[HttpGet]
 		public IActionResult Details(int? id)
 		{
 			if (id == null)
@@ -102,7 +102,7 @@ namespace LinkDev.IKEA.PL.Controllers
 			// Pass the fetched department data to the view
 			return View(new UpdatedEmployeeDto
             {
-				//Id = department.Id,
+				Id = employee.Id,
 				Name = employee.Name,
 			
 				Adress=employee.Adress,
@@ -148,20 +148,20 @@ namespace LinkDev.IKEA.PL.Controllers
 			ModelState.AddModelError(string.Empty, message);
 			return View(emploee);
 		}
-		[HttpGet]
-		public IActionResult Delete(int? id)
-		{
-			if (id == null)
-			{
-				return BadRequest();
-			}
-			var department = _employesService.GetEmployesById(id.Value);
-			if (department == null)
-			{
-				return NotFound();
-			}
-			return View(department);
-		}
+		//[HttpGet]
+		//public IActionResult Delete(int? id)
+		//{
+		//	if (id == null)
+		//	{
+		//		return BadRequest();
+		//	}
+		//	var department = _employesService.GetEmployesById(id.Value);
+		//	if (department == null)
+		//	{
+		//		return NotFound();
+		//	}
+		//	return View(department);
+		//}
 		[HttpPost]
 
 		public IActionResult Delete(int id)

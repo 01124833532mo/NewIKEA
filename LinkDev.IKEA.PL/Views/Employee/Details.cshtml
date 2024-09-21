@@ -209,6 +209,8 @@
                 <label class="form-label" asp-for="Name"></label>
                 <input asp-for="Name" class="form-control" readonly />
             </div>
+          
+
             <div class="col-md-6 mb-3">
                 <label class="form-label" asp-for="Email"></label>
                 <input asp-for="Email" class="form-control" readonly />
@@ -233,6 +235,8 @@
                 <label class="form-label" asp-for="PhoneNumber"></label>
                 <input asp-for="PhoneNumber" class="form-control" readonly />
             </div>
+
+          
             <!-- Gender and Employee Type -->
             <div class="col-md-6 mb-3">
                 <label class="form-label" asp-for="Gender"></label>
@@ -276,12 +280,16 @@
                 <label class="col-form-label" asp-for="LastModifiedOn"></label>
                 <input asp-for="LastModifiedOn" class="form-control" readonly />
             </div>
+           
         </div>
     </div>
 
     <!-- Buttons -->
     <div class="mt-4">
-        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-success">Edit</a>
+        <a asp-controller="Employee" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-success">Edit</a>
         <a asp-action="Index" class="btn btn-secondary">Back To List</a>
     </div>
 </div>
+
+
+
