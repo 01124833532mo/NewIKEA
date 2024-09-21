@@ -1,7 +1,15 @@
 ﻿@model IEnumerable<DepartmentToReturnDto>
 @{
 	ViewData["Title"] = "Departments";
+
+	string? message = ViewData["Message"] as string ;
 }
+@* <div class ="alert alert-info">
+
+	@ViewData["Message"]
+</div> *@
+
+
 
 <h1>All Departments </h1>
 

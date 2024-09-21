@@ -20,6 +20,9 @@ namespace LinkDev.IKEA.PL.Controllers
 
         public IActionResult Index()
         {
+            //ViewData["Message"] = "hello view date";
+            //ViewBag["Message"] = "heloo view bag";
+
             var departments = _depratmentService.GetAllDepartments();
             return View(departments);
         }
@@ -183,8 +186,11 @@ namespace LinkDev.IKEA.PL.Controllers
         {
             var message = string.Empty;
 
-            try
-            {
+		
+            
+
+			try
+			{
                 var deleted = _depratmentService.DeleteDepartment(id);
                 if (deleted)
                 {
