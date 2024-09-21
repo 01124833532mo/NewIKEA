@@ -58,6 +58,7 @@ return false;
 
 		public IEnumerable<EmployeeToReturnDto> GetAllEmployes()
 		{
+
 			return _employeeRepository.GetAllAsIQueryable().Where(e=>!e.IsDeleted).Select(emploee => new EmployeeToReturnDto
 			{
 
@@ -72,7 +73,10 @@ return false;
 				EmployeeType = emploee.EmployeeType.ToString() ,
 			
 			}).ToList();
-
+			//var employee = result.ToList();
+			//var emploee2 = result.FirstOrDefault();
+			//return employee;
+			//return emploee2;
 		}
 
 		public EmployeeDetailsToReturnDto? GetEmployesById(int id)
