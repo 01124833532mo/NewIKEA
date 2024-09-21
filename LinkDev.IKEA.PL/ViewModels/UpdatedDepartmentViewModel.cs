@@ -1,20 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-namespace Link.Dev.IKEA.BLL.Models.Departments
+﻿
+using System.ComponentModel.DataAnnotations;
+
+namespace LinkDev.IKEA.PL.ViewModels
 {
-    public class UpdatedDepartmentDto
+    public class UpdatedDepartmentViewModel
     {
-        public int Id { get; set; }
+
+        //public int Id { get; set; }
         //public int CreatedBy { get; set; }
         //public DateTime CreateOn { get; set; }
         //public int LastModifiedBy { get; set; }
         //public DateTime LastModifiedOn { get; set; }
+        [Required(ErrorMessage = "Code is Requered")]
+
         public string Code { get; set; } = null!;
+
+
+
         public string Name { get; set; } = null!;
         public string? Description { get; set; }
+        [Display(Name = "Creation of Date")]
         public DateOnly CreationDate { get; set; }
     }
 }
