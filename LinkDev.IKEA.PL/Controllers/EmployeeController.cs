@@ -3,6 +3,7 @@ using Link.Dev.IKEA.BLL.Services.Departments;
 using LinkDev.IKEA.BLL.Models.Employees;
 using LinkDev.IKEA.BLL.Servcies.Employees;
 using LinkDev.IKEA.PL.ViewModels;
+using LinkDev.IKEA.PL.ViewModels.Employee;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LinkDev.IKEA.PL.Controllers
@@ -81,89 +82,86 @@ namespace LinkDev.IKEA.PL.Controllers
 			return View(employee);
 		}
 
-		//[HttpGet]
-		//public IActionResult Edit(int? id)
-		//{
+		[HttpGet]
+		public IActionResult Edit(int? id)
+		{
 
-		//	if (id is null)
-		//	{
-		//		return BadRequest();
-		//	}
+			if (id is null)
+			{
+				return BadRequest();
+			}
 
-		//	var employee = _employesService.GetEmployesById(id.Value);
+			var employee = _employesService.GetEmployesById(id.Value);
 
-		//	// Check if department exists
-		//	if (employee == null)
-		//	{
-		//		return NotFound();  // Return 404 if the department is not found
-		//	}
+			// Check if department exists
+			if (employee == null)
+			{
+				return NotFound();  // Return 404 if the department is not found
+			}
 
-		//	// Pass the fetched department data to the view
-		//	return View(new UpdatedDepartmentViewModel
-		//	{
-		//		Code = department.Code,
-		//		//Id = department.Id,
-		//		Name = department.Name,
-		//		CreationDate = department.CreationDate,
-		//		Description = department.Description,
+			// Pass the fetched department data to the view
+			return View(new UpdatedEmployeeDto
+            {
+				//Id = department.Id,
+				Name = employee.Name,
+			
+				Adress=employee.Adress,
+				Email=employee.Email,
+				Age=employee.Age,
+				Salary=employee.Salary,
+				HiringDate=employee.HiringDate,
+				IsActive=employee.IsActive,
+				PhoneNumber=employee.PhoneNumber,
+				EmployeeType=employee.EmployeeType,
+				Gender	=employee.Gender,
 
 
 
+			});
+		}
+		[HttpPost]
+		public IActionResult Edit([FromRoute] int id, UpdatedEmployeeDto emploee)
+		{
+			if (!ModelState.IsValid)
+			{
+				return View(emploee);
+			}
+			var message = string.Empty;
+			try
+			{
+				var updated = _employesService.UpdateEmploye(emploee) > 0;
+				if (updated)
+				{
+					return RedirectToAction(nameof(Index));
+				}
 
-		//	});
-		//}
-		//[HttpPost]
-		//public IActionResult Edit([FromRoute] int id, UpdatedDepartmentViewModel departmentVm)
-		//{
-		//	if (!ModelState.IsValid)
-		//	{
-		//		return View(departmentVm);
-		//	}
-		//	var message = string.Empty;
-		//	try
-		//	{
-		//		var departmenttoUpdate = new UpdatedDepartmentDto
-		//		{
-		//			Code = departmentVm.Code,
-		//			Id = id,
-		//			Name = departmentVm.Name,
-		//			CreationDate = departmentVm.CreationDate,
-		//			Description = departmentVm.Description
+				message = "an error has occured during updating the employee";
+			}
+			catch (Exception ex)
+			{
 
-		//		};
-		//		var updated = _employesService.UpdateDepartment(departmenttoUpdate) > 0;
-		//		if (updated)
-		//		{
-		//			return RedirectToAction(nameof(Index));
-		//		}
+				_logger.LogError(ex, ex.Message);
 
-		//		message = "an error has occured during updating the department";
-		//	}
-		//	catch (Exception ex)
-		//	{
+				message = _webHostEnvironment.IsDevelopment() ? ex.Message : "an error has occured during updating the employee";
 
-		//		_logger.LogError(ex, ex.Message);
-
-		//		message = _webHostEnvironment.IsDevelopment() ? ex.Message : "an error has occured during updating the department";
-
-		//	}
-		//	ModelState.AddModelError(string.Empty, message);
-		//	return View(departmentVm);
-		//}
-		//[HttpGet]
-		//public IActionResult Delete(int? id)
-		//{
-		//    if (id == null)
-		//    {
-		//        return BadRequest();
-		//    }
-		//    var department = _depratmentService.GetDepartmentsById(id.Value);
-		//    if (department == null)
-		//    {
-		//        return NotFound();
-		//    }
-		//    return View(department);
-		//}
+			}
+			ModelState.AddModelError(string.Empty, message);
+			return View(emploee);
+		}
+		[HttpGet]
+		public IActionResult Delete(int? id)
+		{
+			if (id == null)
+			{
+				return BadRequest();
+			}
+			var department = _employesService.GetEmployesById(id.Value);
+			if (department == null)
+			{
+				return NotFound();
+			}
+			return View(department);
+		}
 		[HttpPost]
 
 		public IActionResult Delete(int id)
