@@ -35,7 +35,7 @@ namespace LinkDev.IKEA.PL.Controllers
 			return View();
 		}
 
-		[ValidateAntiForgeryToken]
+		//[ValidateAntiForgeryToken]
 		[HttpPost]
 		public IActionResult Create(CreatedEmployeeDto employeeDto)
 		{
@@ -166,7 +166,9 @@ namespace LinkDev.IKEA.PL.Controllers
         //	}
         //	return View(department);
         //}
-        [ValidateAntiForgeryToken]
+
+
+        //[ValidateAntiForgeryToken]
 
         [HttpPost]
 

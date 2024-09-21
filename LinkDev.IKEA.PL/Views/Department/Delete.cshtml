@@ -1,6 +1,8 @@
 ﻿@model DepartmentDetailsToReturnDto
 @{
     ViewData["Title"] = "Delete";
+    ViewData["Id"] = Model.Id;
+
 }
 
 
@@ -12,109 +14,5 @@
 <br />
 
 
-<ul class="nav nav-tabs " id="departmentTabs" role="tablist">
+<partial name="Partials/DetailsDeleteDepartmentPartial" />
 
-    <li class="nav nav-tabs" role="presentation">
-
-        <a class="nav nav-link active " id="general-tab" data-bs-toggle="tab" href="#general" role="tab" aria-selected="true"> General </a>
-
-    </li>
-
-    <li class=" nav-item" role="presentation">
-
-
-        <a class=" nav-link  " id="adminstration-tab" data-bs-toggle="tab" href="#adminstration" role="tab" aria-selected="false"> Adminstration </a>
-
-    </li>
-
-</ul>
-
-<div class="tab-content" id="myTabContent">
-
-    <div class="tab-pane fade show active p-4 border" id="general" role="tabpanel" aria-labelledby="general-tab">
-
-        <div class="row">
-
-            <div class="from-group col-6">
-
-                <label class="col-form-label" asp-for="Code"></label>
-
-                <input asp-for="Code" class="form-control" readonly />
-
-            </div>
-
-            <div class="from-group col-6">
-
-                <label class="col-form-label" asp-for="Name"></label>
-
-                <input asp-for="Name" class="form-control" readonly />
-
-            </div>
-
-            <div class="from-group col-12">
-
-                <label class="col-form-label" asp-for="Description"></label>
-
-                <input asp-for="Description" class="form-control" readonly />
-
-            </div>
-
-            <div class="from-group col-12">
-
-                <label class="col-form-label" asp-for="CreationDate"></label>
-
-                <input asp-for="CreationDate" class="form-control" readonly />
-
-            </div>
-
-        </div>
-
-
-    </div>
-
-    <div class="tab-pane fade p-4  border" id="adminstration" role="tabpanel" aria-labelledby="adminstration-tab">
-
-        <div class="from-group col-6">
-
-            <label class="col-form-label" asp-for="CreatedBy"></label>
-
-            <input asp-for="CreatedBy" class="form-control" readonly />
-
-
-        </div>
-
-        <div class="from-group col-6">
-
-            <label class="col-form-label" asp-for="CreateOn"></label>
-
-            <input asp-for="CreateOn" class="form-control" readonly />
-
-        </div>
-
-        <div class="from-group col-6">
-
-            <label class="col-form-label" asp-for="LastModifiedBy"></label>
-
-            <input asp-for="LastModifiedBy" class="form-control" readonly />
-
-        </div>
-
-        <div class="from-group col-6">
-
-            <label class="col-form-label" asp-for="LastModifiedOn"></label>
-
-            <input asp-for="LastModifiedOn" class="form-control" readonly />
-
-        </div>
-
-    </div>
-
-    <form asp-action="Delete" method="post" asp-route-id="@Model.Id" class="mt-4">
-
-      <input type="submit" value="Delete" class="btn btn-danger" />
-
-        <a asp-action="Index" class="btn btn-secondary"> Cancel </a>
-
-    </form>
-
-</div>

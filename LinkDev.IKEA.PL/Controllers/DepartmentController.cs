@@ -1,5 +1,6 @@
 ﻿using Link.Dev.IKEA.BLL.Models.Departments;
 using Link.Dev.IKEA.BLL.Services.Departments;
+using LinkDev.IKEA.DAL.Entites.Departments;
 using LinkDev.IKEA.PL.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 namespace LinkDev.IKEA.PL.Controllers
@@ -29,17 +30,26 @@ namespace LinkDev.IKEA.PL.Controllers
         {
             return View();
         }
-        [ValidateAntiForgeryToken]
 
         [HttpPost]
-        public IActionResult Create(CreatedDepartmentDto department)
+        //[ValidateAntiForgeryToken]
+
+        public IActionResult Create(DepartmentViewModel department)
         {
             if (!ModelState.IsValid)
                 return View(department);
             var message = string.Empty;
             try
             {
-                var result = _depratmentService.CreateDepartment(department);
+                var createdDepartment = new CreatedDepartmentDto
+                {
+                    Code = department.Code,
+                    Name = department.Name,
+                    CreationDate = department.CreationDate,
+                    Description = department.Description
+
+                };
+                var result = _depratmentService.CreateDepartment(createdDepartment);
                 if (result > 0)
                     return RedirectToAction(nameof(Index));
                 else
@@ -97,7 +107,7 @@ namespace LinkDev.IKEA.PL.Controllers
             }
 
             // Pass the fetched department data to the view
-            return View(new UpdatedDepartmentViewModel
+            return View(new DepartmentViewModel
             {
                 Code = department.Code,
                 //Id = department.Id,
@@ -113,7 +123,7 @@ namespace LinkDev.IKEA.PL.Controllers
         [ValidateAntiForgeryToken]
 
         [HttpPost]
-        public IActionResult Edit([FromRoute] int id, UpdatedDepartmentViewModel departmentVm)
+        public IActionResult Edit([FromRoute] int id, DepartmentViewModel departmentVm)
         {
             if (!ModelState.IsValid)
             {
