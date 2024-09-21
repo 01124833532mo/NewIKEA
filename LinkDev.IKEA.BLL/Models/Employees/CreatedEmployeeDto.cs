@@ -19,7 +19,7 @@ namespace LinkDev.IKEA.BLL.Models.Employees
 		public int? Age { get; set; }
 
 		[RegularExpression(@"^[0-9]{1,3}-[a-zA-Z]{5,10}-[a-zA-Z]{4,10}-[a-zA-Z]{5,10}$", ErrorMessage = "Adress must like 123-streate-city-country")]
-		public string Adress { get; set; }
+		public string Adress { get; set; } = null!;
 		//[DataType(DataType.Currency)]
 		public decimal Salary { get; set; }
 

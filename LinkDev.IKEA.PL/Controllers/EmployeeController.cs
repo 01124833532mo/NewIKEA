@@ -34,6 +34,8 @@ namespace LinkDev.IKEA.PL.Controllers
 		{
 			return View();
 		}
+
+		[ValidateAntiForgeryToken]
 		[HttpPost]
 		public IActionResult Create(CreatedEmployeeDto employeeDto)
 		{
@@ -82,7 +84,7 @@ namespace LinkDev.IKEA.PL.Controllers
 			return View(employee);
 		}
 
-		[HttpGet]
+        [HttpGet]
 		public IActionResult Edit(int? id)
 		{
 
@@ -119,7 +121,9 @@ namespace LinkDev.IKEA.PL.Controllers
 
 			});
 		}
-		[HttpPost]
+        [ValidateAntiForgeryToken]
+
+        [HttpPost]
 		public IActionResult Edit([FromRoute] int id, UpdatedEmployeeDto emploee)
 		{
 			if (!ModelState.IsValid)
@@ -148,21 +152,23 @@ namespace LinkDev.IKEA.PL.Controllers
 			ModelState.AddModelError(string.Empty, message);
 			return View(emploee);
 		}
-		//[HttpGet]
-		//public IActionResult Delete(int? id)
-		//{
-		//	if (id == null)
-		//	{
-		//		return BadRequest();
-		//	}
-		//	var department = _employesService.GetEmployesById(id.Value);
-		//	if (department == null)
-		//	{
-		//		return NotFound();
-		//	}
-		//	return View(department);
-		//}
-		[HttpPost]
+        //[HttpGet]
+        //public IActionResult Delete(int? id)
+        //{
+        //	if (id == null)
+        //	{
+        //		return BadRequest();
+        //	}
+        //	var department = _employesService.GetEmployesById(id.Value);
+        //	if (department == null)
+        //	{
+        //		return NotFound();
+        //	}
+        //	return View(department);
+        //}
+        [ValidateAntiForgeryToken]
+
+        [HttpPost]
 
 		public IActionResult Delete(int id)
 		{

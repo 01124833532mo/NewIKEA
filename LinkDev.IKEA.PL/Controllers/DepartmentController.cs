@@ -29,6 +29,8 @@ namespace LinkDev.IKEA.PL.Controllers
         {
             return View();
         }
+        [ValidateAntiForgeryToken]
+
         [HttpPost]
         public IActionResult Create(CreatedDepartmentDto department)
         {
@@ -108,6 +110,8 @@ namespace LinkDev.IKEA.PL.Controllers
 
             });
         }
+        [ValidateAntiForgeryToken]
+
         [HttpPost]
         public IActionResult Edit([FromRoute] int id, UpdatedDepartmentViewModel departmentVm)
         {
@@ -160,6 +164,9 @@ namespace LinkDev.IKEA.PL.Controllers
         //    }
         //    return View(department);
         //}
+
+        [ValidateAntiForgeryToken]
+
         [HttpPost]
 
         public IActionResult Delete(int id)
