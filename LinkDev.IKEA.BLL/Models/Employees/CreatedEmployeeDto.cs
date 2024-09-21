@@ -35,7 +35,7 @@ namespace LinkDev.IKEA.BLL.Models.Employees
 		public DateOnly HiringDate { get; set; }
 
 		public Gender Gender { get; set; }
-
+		[Display(Name ="Emploee Type")]
 		public EmployeeType EmployeeType { get; set; }
 	}
 }

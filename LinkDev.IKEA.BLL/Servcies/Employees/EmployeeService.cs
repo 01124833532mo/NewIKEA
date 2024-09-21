@@ -89,8 +89,8 @@ return false;
 				Email = emploee.Email,
 				PhoneNumber = emploee.PhoneNumber,
 				HiringDate = emploee.HiringDate,
-				Gender = nameof(emploee.Gender),
-				EmployeeType = nameof(emploee.EmployeeType),
+				Gender = emploee.Gender,
+				EmployeeType =emploee.EmployeeType,
 					
 				};
 			}
