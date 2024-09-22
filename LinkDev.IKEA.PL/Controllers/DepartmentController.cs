@@ -52,29 +52,31 @@ namespace LinkDev.IKEA.PL.Controllers
                     Description = department.Description
 
                 };
-                var result = _depratmentService.CreateDepartment(createdDepartment);
-                if (result > 0)
-                    return RedirectToAction(nameof(Index));
-                else
+                var created = _depratmentService.CreateDepartment(createdDepartment) >0 ;
+                if (!created)
                 {
-                    message = "Department is not Created";
-                    ModelState.AddModelError(string.Empty, message);
-                    return View(result);
+                    TempData["Message"] = "Department Is not Created";
                 }
+
+
+                TempData["Message2"] = "Department is created";
+					ModelState.AddModelError(string.Empty, message);
+					return View(department);
+				
+			
+
+
+
+
+
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                if (_webHostEnvironment.IsDevelopment())
-                {
-                    message = ex.Message;
-                    return View(department);
-                }
-                else
-                {
-                    message = "Department is not Created";
-                    return View("Error", message);
-                }
+
+                message = _webHostEnvironment.IsDevelopment() ? ex.Message : "Department is not created";
+                TempData["Message"] = message;
+                return RedirectToAction(nameof(Index));
             }
         }
 
