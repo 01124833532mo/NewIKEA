@@ -13,25 +13,29 @@ namespace LinkDev.IKEA.PL.Controllers
 		private readonly IEmployesService _employesService;
 		private readonly ILogger _logger;
 		private readonly IWebHostEnvironment _webHostEnvironment;
-		public EmployeeController(IEmployesService employesService, ILogger<DepartmentController> logger, IWebHostEnvironment webHostEnvironment)
+
+        public EmployeeController(IEmployesService employesService, ILogger<DepartmentController> logger, IWebHostEnvironment webHostEnvironment)
 		{
 			_employesService = employesService;
 			_logger = logger;
 			_webHostEnvironment = webHostEnvironment;
-		}
+        }
 
 		[HttpGet]
 
 		public IActionResult Index()
 		{
 			var employees = _employesService.GetAllEmployes();
+
 			return View(employees);
 		}
 
 		[HttpGet]
 
-		public IActionResult Create()
+		// injection Idepartmentservice at view or PartialView
+		public IActionResult Create(/*[FromServices] IDepratmentService depratmentService*/)
 		{
+			//ViewData["Departments"] = depratmentService.GetAllDepartments();
 			return View();
 		}
 
@@ -85,7 +89,7 @@ namespace LinkDev.IKEA.PL.Controllers
 		}
 
         [HttpGet]
-		public IActionResult Edit(int? id)
+		public IActionResult Edit(int? id,[FromServices] IDepratmentService depratmentService)
 		{
 
 			if (id is null)
@@ -101,8 +105,11 @@ namespace LinkDev.IKEA.PL.Controllers
 				return NotFound();  // Return 404 if the department is not found
 			}
 
-			// Pass the fetched department data to the view
-			return View(new UpdatedEmployeeDto
+            ViewData["Departments"] = depratmentService.GetAllDepartments();
+
+
+            // Pass the fetched department data to the view
+            return View(new UpdatedEmployeeDto
             {
 				Id = employee.Id,
 				Name = employee.Name,

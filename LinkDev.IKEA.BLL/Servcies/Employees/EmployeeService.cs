@@ -4,6 +4,7 @@ using LinkDev.IKEA.BLL.Models.Employees;
 using LinkDev.IKEA.DAL.Common.Enums;
 using LinkDev.IKEA.DAL.Entites.Employees;
 using LinkDev.IKEA.DAL.Persistance.Repositories.Employees;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,7 +38,9 @@ namespace LinkDev.IKEA.BLL.Servcies.Employees
 				EmployeeType = employeeDto.EmployeeType,
 				CreatedBy = 1,
 				LastModifiedBy = 1,
-				LastModifiedOn= DateTime.UtcNow
+				LastModifiedOn= DateTime.UtcNow,
+				DepartmentId= employeeDto.DepartmentId,
+				
 
 			};
 
@@ -59,7 +62,11 @@ return false;
 		public IEnumerable<EmployeeToReturnDto> GetAllEmployes()
 		{
 
-			return _employeeRepository.GetAllAsIQueryable().Where(e=>!e.IsDeleted).Select(emploee => new EmployeeToReturnDto
+			return _employeeRepository
+				.GetAllAsIQueryable()
+				.Where(e=>!e.IsDeleted)
+				.Include(e=>e.Department)
+				.Select(emploee => new EmployeeToReturnDto
 			{
 
 				Id = emploee.Id,
@@ -71,7 +78,7 @@ return false;
 			
 				Gender = emploee.Gender.ToString(),
 				EmployeeType = emploee.EmployeeType.ToString() ,
-			
+				Department=emploee.Department.Name
 			}).ToList();
 			//var employee = result.ToList();
 			//var emploee2 = result.FirstOrDefault();
@@ -96,7 +103,7 @@ return false;
 				HiringDate = emploee.HiringDate,
 				Gender = emploee.Gender,
 				EmployeeType =emploee.EmployeeType,
-					
+					Department=emploee.Department.Name
 				};
 			}
 			else
@@ -122,7 +129,8 @@ return false;
 				EmployeeType = employeeDto.EmployeeType,
 				CreatedBy = 1,
 				LastModifiedBy = 1,
-				LastModifiedOn = DateTime.UtcNow
+				LastModifiedOn = DateTime.UtcNow,
+				DepartmentId= employeeDto.DepartmentId,
 
 			};
 			return _employeeRepository.Update(employee);

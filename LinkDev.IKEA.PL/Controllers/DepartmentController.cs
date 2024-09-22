@@ -149,10 +149,17 @@ namespace LinkDev.IKEA.PL.Controllers
                 var updated = _depratmentService.UpdateDepartment(departmenttoUpdate) > 0;
                 if (updated)
                 {
+                    TempData["Message"] = "Department is Updated";
                     return RedirectToAction(nameof(Index));
                 }
+                else
+				{
+					TempData["Message"] = "Department is not Updated";
 
-                message = "an error has occured during updating the department";
+
+				}
+
+				message = "an error has occured during updating the department";
             }
             catch (Exception ex)
             {
@@ -165,20 +172,21 @@ namespace LinkDev.IKEA.PL.Controllers
             ModelState.AddModelError(string.Empty, message);
             return View(departmentVm);
         }
-        //[HttpGet]
-        //public IActionResult Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return BadRequest();
-        //    }
-        //    var department = _depratmentService.GetDepartmentsById(id.Value);
-        //    if (department == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return View(department);
-        //}
+
+        [HttpGet]
+        public IActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return BadRequest();
+            }
+            var department = _depratmentService.GetDepartmentsById(id.Value);
+            if (department == null)
+            {
+                return NotFound();
+            }
+            return View(department);
+        }
 
         [ValidateAntiForgeryToken]
 

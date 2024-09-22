@@ -43,12 +43,31 @@
 
 	</div>
 
-	<div class="mt-4 ">
+	
 
-		<input type="submit" value="Create" class="btn btn-primary" /> |
+	@if (ViewBag.Action == "Create")
 
-		<a asp-action="Index" class="btn btn-dark">Back to List</a>
+	{
+		<div class="mt-4 ">
 
-	</div>
+			<input type="submit" value="@ViewBag.Action" class="btn btn-primary" /> |
+
+			<a asp-action="Index" class="btn btn-dark">Back to List</a>
+
+		</div>
+
+	}
+	else
+	{
+		<div class="mt-4 ">
+
+			<input type="submit" value="@ViewBag.Action" class="btn btn-primary" /> |
+
+			<a asp-action="Index" class="btn btn-dark">Back to List</a>
+
+		</div>
+
+
+	}
 
 </form>
