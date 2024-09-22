@@ -9,10 +9,12 @@
     var Departments = new SelectList(_departmentsevice.GetAllDepartments(), nameof(DepartmentToReturnDto.Id), nameof(DepartmentToReturnDto.Name ));
 }
 
+
+
 <div class="row justify-content-center align-items-center flex-column">
     <h1 class="col-6 my-4">Create Employee</h1>
 
-    <form action="/Employee/Create" method="post" class="col-6">
+    <form asp-action="Create" method="post" class="col-6">
         <div asp-validation-summary="ModelOnly"></div>
 
         <!-- Name and Email on the same row -->
@@ -57,12 +59,6 @@
             </div>
         </div>
 
-
-        <div class="col-sm-6">
-            <label class="form-label" asp-for="PhoneNumber"></label>
-            <input asp-for="PhoneNumber" class="form-control mb-3" />
-            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-        </div>
 
 
         <div class="col-sm-6 mb-3">

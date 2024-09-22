@@ -2,6 +2,7 @@
 using Link.Dev.IKEA.BLL.Services.Departments;
 using LinkDev.IKEA.BLL.Models.Employees;
 using LinkDev.IKEA.BLL.Servcies.Employees;
+using LinkDev.IKEA.DAL.Entites.Employees;
 using LinkDev.IKEA.PL.ViewModels;
 using LinkDev.IKEA.PL.ViewModels.Employee;
 using Microsoft.AspNetCore.Mvc;
@@ -38,11 +39,12 @@ namespace LinkDev.IKEA.PL.Controllers
 			//ViewData["Departments"] = depratmentService.GetAllDepartments();
 			return View();
 		}
-
+		
 		//[ValidateAntiForgeryToken]
 		[HttpPost]
 		public IActionResult Create(CreatedEmployeeDto employeeDto)
 		{
+			
 			if (!ModelState.IsValid)
 				return View(employeeDto);
 			var message = string.Empty;
@@ -50,9 +52,16 @@ namespace LinkDev.IKEA.PL.Controllers
 			{
 				var result = _employesService.CreateEmploye(employeeDto);
 				if (result > 0)
+				{
+					TempData["Message"] = "Employee Is Created";
+
 					return RedirectToAction(nameof(Index));
+
+				}
 				else
 				{
+					TempData["Message"] = "Employee is not Created";
+
 					message = "Employee is not Created";
 					ModelState.AddModelError(string.Empty, message);
 					return View(result);
@@ -141,12 +150,20 @@ namespace LinkDev.IKEA.PL.Controllers
 			try
 			{
 				var updated = _employesService.UpdateEmploye(emploee) > 0;
+
 				if (updated)
 				{
+					TempData["Message"] = "Employee Is Updated";
 					return RedirectToAction(nameof(Index));
 				}
+				else
+				{
+					TempData["Message"] = "Employee Is Not Updated";
 
-				message = "an error has occured during updating the employee";
+
+
+				}
+
 			}
 			catch (Exception ex)
 			{
@@ -188,9 +205,16 @@ namespace LinkDev.IKEA.PL.Controllers
 				var employee = _employesService.DeleteEmploye(id);
 				if (employee)
 				{
+					TempData["Message"] = "Employee Is Deleted";
 					return RedirectToAction(nameof(Index));
 				}
-				message = "an error has occured during deleting the emploee";
+				else
+				{
+					TempData["Message"] = "Employee Is Not Deleted";
+
+					message = "an error has occured during deleting the emploee";
+
+				}
 			}
 			catch (Exception ex)
 			{

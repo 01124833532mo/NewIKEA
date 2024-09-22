@@ -3,6 +3,7 @@ using Link.Dev.IKEA.BLL.Services.Departments;
 using LinkDev.IKEA.DAL.Entites.Departments;
 using LinkDev.IKEA.PL.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 namespace LinkDev.IKEA.PL.Controllers
 {
     public class DepartmentController : Controller
@@ -204,9 +205,14 @@ namespace LinkDev.IKEA.PL.Controllers
                 var deleted = _depratmentService.DeleteDepartment(id);
                 if (deleted)
                 {
+                    TempData["Message"]="The Department is Deleted";
                     return RedirectToAction(nameof(Index));
                 }
-                message = "an error has occured during deleting the department";
+                else
+                {
+                    TempData["Message"] = "an error has occured during deleting the department";
+
+                }
             }
             catch (Exception ex)
             {

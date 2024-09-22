@@ -65,7 +65,7 @@ return false;
 			return _employeeRepository
 				.GetAllAsIQueryable()
 				.Where(e=>!e.IsDeleted)
-				.Include(e=>e.Department)
+				.Include(e => e.Department)
 				.Select(emploee => new EmployeeToReturnDto
 			{
 
