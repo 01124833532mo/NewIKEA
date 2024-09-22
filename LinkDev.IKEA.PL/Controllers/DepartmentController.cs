@@ -1,5 +1,6 @@
 ﻿using Link.Dev.IKEA.BLL.Models.Departments;
 using Link.Dev.IKEA.BLL.Services.Departments;
+using LinkDev.IKEA.DAL.Entites.Departments;
 using LinkDev.IKEA.PL.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 namespace LinkDev.IKEA.PL.Controllers
@@ -19,6 +20,9 @@ namespace LinkDev.IKEA.PL.Controllers
 
         public IActionResult Index()
         {
+            //ViewData["Message"] = "hello view date";
+            //ViewBag["Message"] = "heloo view bag";
+
             var departments = _depratmentService.GetAllDepartments();
             return View(departments);
         }
@@ -29,37 +33,50 @@ namespace LinkDev.IKEA.PL.Controllers
         {
             return View();
         }
+
         [HttpPost]
-        public IActionResult Create(CreatedDepartmentDto department)
+        //[ValidateAntiForgeryToken]
+
+        public IActionResult Create(DepartmentViewModel department)
         {
             if (!ModelState.IsValid)
                 return View(department);
             var message = string.Empty;
             try
             {
-                var result = _depratmentService.CreateDepartment(department);
-                if (result > 0)
-                    return RedirectToAction(nameof(Index));
-                else
+                var createdDepartment = new CreatedDepartmentDto
                 {
-                    message = "Department is not Created";
-                    ModelState.AddModelError(string.Empty, message);
-                    return View(result);
+                    Code = department.Code,
+                    Name = department.Name,
+                    CreationDate = department.CreationDate,
+                    Description = department.Description
+
+                };
+                var created = _depratmentService.CreateDepartment(createdDepartment) >0 ;
+                if (!created)
+                {
+                    TempData["Message"] = "Department Is not Created";
                 }
+
+
+                TempData["Message2"] = "Department is created";
+					ModelState.AddModelError(string.Empty, message);
+					return View(department);
+				
+			
+
+
+
+
+
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                if (_webHostEnvironment.IsDevelopment())
-                {
-                    message = ex.Message;
-                    return View(department);
-                }
-                else
-                {
-                    message = "Department is not Created";
-                    return View("Error", message);
-                }
+
+                message = _webHostEnvironment.IsDevelopment() ? ex.Message : "Department is not created";
+                TempData["Message"] = message;
+                return RedirectToAction(nameof(Index));
             }
         }
 
@@ -95,7 +112,7 @@ namespace LinkDev.IKEA.PL.Controllers
             }
 
             // Pass the fetched department data to the view
-            return View(new UpdatedDepartmentViewModel
+            return View(new DepartmentViewModel
             {
                 Code = department.Code,
                 //Id = department.Id,
@@ -108,8 +125,10 @@ namespace LinkDev.IKEA.PL.Controllers
 
             });
         }
+        [ValidateAntiForgeryToken]
+
         [HttpPost]
-        public IActionResult Edit([FromRoute] int id, UpdatedDepartmentViewModel departmentVm)
+        public IActionResult Edit([FromRoute] int id, DepartmentViewModel departmentVm)
         {
             if (!ModelState.IsValid)
             {
@@ -130,10 +149,17 @@ namespace LinkDev.IKEA.PL.Controllers
                 var updated = _depratmentService.UpdateDepartment(departmenttoUpdate) > 0;
                 if (updated)
                 {
+                    TempData["Message"] = "Department is Updated";
                     return RedirectToAction(nameof(Index));
                 }
+                else
+				{
+					TempData["Message"] = "Department is not Updated";
 
-                message = "an error has occured during updating the department";
+
+				}
+
+				message = "an error has occured during updating the department";
             }
             catch (Exception ex)
             {
@@ -146,28 +172,35 @@ namespace LinkDev.IKEA.PL.Controllers
             ModelState.AddModelError(string.Empty, message);
             return View(departmentVm);
         }
-        //[HttpGet]
-        //public IActionResult Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return BadRequest();
-        //    }
-        //    var department = _depratmentService.GetDepartmentsById(id.Value);
-        //    if (department == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return View(department);
-        //}
+
+        [HttpGet]
+        public IActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return BadRequest();
+            }
+            var department = _depratmentService.GetDepartmentsById(id.Value);
+            if (department == null)
+            {
+                return NotFound();
+            }
+            return View(department);
+        }
+
+        [ValidateAntiForgeryToken]
+
         [HttpPost]
 
         public IActionResult Delete(int id)
         {
             var message = string.Empty;
 
-            try
-            {
+		
+            
+
+			try
+			{
                 var deleted = _depratmentService.DeleteDepartment(id);
                 if (deleted)
                 {

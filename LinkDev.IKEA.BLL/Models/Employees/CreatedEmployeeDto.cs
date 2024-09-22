@@ -1,4 +1,4 @@
-﻿using LinkDev.IKEA.DAL.Common.Enums;
+﻿ using LinkDev.IKEA.DAL.Common.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -19,7 +19,7 @@ namespace LinkDev.IKEA.BLL.Models.Employees
 		public int? Age { get; set; }
 
 		[RegularExpression(@"^[0-9]{1,3}-[a-zA-Z]{5,10}-[a-zA-Z]{4,10}-[a-zA-Z]{5,10}$", ErrorMessage = "Adress must like 123-streate-city-country")]
-		public string Adress { get; set; }
+		public string Adress { get; set; } = null!;
 		//[DataType(DataType.Currency)]
 		public decimal Salary { get; set; }
 
@@ -37,5 +37,8 @@ namespace LinkDev.IKEA.BLL.Models.Employees
 		public Gender Gender { get; set; }
 		[Display(Name ="Emploee Type")]
 		public EmployeeType EmployeeType { get; set; }
-	}
+
+		[Display(Name ="Department")]
+        public int? DepartmentId { get; set; }
+    }
 }

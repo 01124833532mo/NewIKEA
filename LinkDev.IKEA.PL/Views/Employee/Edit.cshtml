@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Edit";
+    var Departments = new SelectList(ViewData["Departments"] as IEnumerable<DepartmentToReturnDto>, nameof(DepartmentToReturnDto.Id), nameof(DepartmentToReturnDto.Name));
 }
 
 <div class="row justify-content-center align-items-center flex-column">
@@ -52,6 +53,16 @@
             </div>
         </div>
 
+        <div class="col-sm-6">
+            <label class="form-label" asp-for="DepartmentId"></label>
+            <select asp-for="DepartmentId" asp-items="@Departments" class="form-control">
+
+                <option value="@null"> Choose.. </option>
+
+            </select>
+        </div>
+
+
         <!-- Gender and EmployeeType on the same row -->
         <div class="row form-group">
             <div class="col-sm-6">
@@ -96,3 +107,12 @@
         </div>
     </form>
 </div>
+
+@section ValidationScript {
+
+    <partial name="_ValidationScriptsPartial" />
+
+
+}
+
+ 

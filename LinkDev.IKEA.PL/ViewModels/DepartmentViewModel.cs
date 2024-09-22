@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace LinkDev.IKEA.PL.ViewModels
 {
-    public class UpdatedDepartmentViewModel
+    public class DepartmentViewModel
     {
 
         //public int Id { get; set; }

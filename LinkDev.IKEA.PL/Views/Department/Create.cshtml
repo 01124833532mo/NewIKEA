@@ -1,67 +1,41 @@
-﻿@model CreatedDepartmentDto
+﻿@model DepartmentViewModel
 
 @{
 	ViewData["Title"] = "Create";
+	ViewBag.Action = "Create";
 }
 
-<h1 class="row justify-content-center align-items-center">Create Department</h1>
+@if (!string.IsNullOrEmpty(TempData["Message2"] as string))
+{
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="liveToast" class="toast show fade" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000">
+            <div class="toast-header bg-primary text-white">
+                <img src="https://via.placeholder.com/20" class="rounded me-2" alt="IKEA Logo">
+                <strong class="me-auto">IKEA</strong>
+                <small class="text-muted">Just now</small>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body bg-light">
+                <i class="bi bi-info-circle-fill text-primary"></i> @TempData["Message2"]
+            </div>
+        </div>
+    </div>
+}
+
+
+
 
 <div class="row justify-content-center align-items-center flex-column">
+	<h1 class="row justify-content-center align-items-center">Create Department</h1>
 
-	<form action="/Department/Create"   method="post" class="col-8">
-
-
-		<div asp-validation-summary="ModelOnly"></div>
-
-		<div class=" form-group mb-3">
-
-			<label class="form-label" asp-for="Code"></label>
-
-			<input asp-for="Code" class="form-control" />
-
-			<span asp-validation-for="Code" class="text-danger"></span>
-
-
-		</div>
-
-		<div class=" form-group mb-3">
-
-			<label class="form-label" asp-for="Name"></label>
-
-			<input asp-for="Name" class="form-control" />
-
-			<span asp-validation-for="Name" class="text-danger"></span>
-
-
-		</div>
-
-		<div class=" form-group mb-3">
-
-			<label class="form-label" asp-for="Description"></label>
-
-			<textarea asp-for="Description" class="form-control"></textarea>
-
-		</div>
-
-		<div>
-
-			<label class="form-group mb-3" for="DateOfCreation"> Date Of Creation </label>
-
-			<input type="date" asp-for="CreationDate" class="form-control" />
-
-		</div>
-
-		<div class="mt-4 ">
-
-			<input type="submit" value="Create" class="btn btn-primary" /> |
-
-			<a asp-action="Index" class="btn btn-dark">Back to List</a>
-
-		</div>
-
-	</form>
+	<partial name="Partials/CreateEditDepartmentPartial" />
+	
 </div>
 
+@section ValidationScript {
 
+	<partial name="_ValidationScriptsPartial" />
+
+}
 
   

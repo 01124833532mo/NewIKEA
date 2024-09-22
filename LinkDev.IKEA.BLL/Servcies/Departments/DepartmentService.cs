@@ -17,28 +17,44 @@ namespace Link.Dev.IKEA.BLL.Services.Departments
             _departmentRepository = departmentRepository;
         }
         public IEnumerable<DepartmentToReturnDto> GetAllDepartments()
-        {
-            var Departments = _departmentRepository.GetAll();
-            foreach (var department in Departments)
+         {
+            //var Departments = _departmentRepository.GetAll();
+            //foreach (var department in Departments)
+            //{
+            //  yield  return new DepartmentToReturnDto()
+            //    {
+            //        Id = department.Id,
+            //        Name = department.Name,
+            //        Description=department.Description,
+            //        CreationDate = department.CreationDate,
+            //        Code    = department.Code,
+            //    };
+            //}
+
+        
+            //yield return (DepartmentToReturnDto)Departments;
+
+            //yield return new DepartmentToReturnDto
+            //{
+            //    Id = department.Id,
+            //    Code = department.Code,
+            //    Name = department.Name,
+            //    Description = department.Description,
+            //    CreationDate = department.CreationDate,
+            //};
+
+
+
+
+            var Departments2 = _departmentRepository.GetAllAsIQueryable().Where(d => !d.IsDeleted).Select(D => new DepartmentToReturnDto
             {
-                /// yield return new DepartmentToReturnDto
-                /// {
-                /// 	Id = department.Id,
-                /// 	Code = department.Code,
-                /// 	Name = department.Name,
-                /// 	Description = department.Description,
-                /// 	CreationDate = department.CreationDate,
-                /// };
-                //yield return (DepartmentToReturnDto)Departments;
-                yield return new DepartmentToReturnDto
-                {
-                    Id = department.Id,
-                    Code = department.Code,
-                    Name = department.Name,
-                    Description = department.Description,
-                    CreationDate = department.CreationDate,
-                };
-            }
+                Id = D.Id,
+                Code = D.Code,
+                Name = D.Name,
+                Description = D.Description,
+                CreationDate = D.CreationDate,
+            }).AsNoTracking().ToList();
+            return Departments2;
         }
         public IEnumerable<DepartmentToReturnDto> GetAllDepartmentsIQueryable()
         {
@@ -106,6 +122,7 @@ namespace Link.Dev.IKEA.BLL.Services.Departments
         public bool DeleteDepartment(int id)
         {
             var department = _departmentRepository.GetById(id);
+            
             if (department is not null)
             {
                 return _departmentRepository.Delete(department) > 0;
