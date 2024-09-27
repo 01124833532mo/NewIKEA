@@ -1,6 +1,8 @@
 ﻿using Link.Dev.IKEA.BLL.Models.Departments;
 using Link.Dev.IKEA.DAL.Persistence.Repositories.Departments;
+using LinkDev.IKEA.BLL.Servcies.Employees;
 using LinkDev.IKEA.DAL.Entites.Departments;
+using LinkDev.IKEA.DAL.Persistance.Repositories.Employees;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -12,9 +14,12 @@ namespace Link.Dev.IKEA.BLL.Services.Departments
     public class DepartmentService : IDepratmentService
     {
         private readonly IDepartmentRepository _departmentRepository;
-        public DepartmentService(IDepartmentRepository departmentRepository)
+        private readonly IEmployeeRepository _employeeRepository;
+
+        public DepartmentService(IDepartmentRepository departmentRepository ,IEmployeeRepository employeeRepository)
         {
             _departmentRepository = departmentRepository;
+            _employeeRepository = employeeRepository;
         }
         public IEnumerable<DepartmentToReturnDto> GetAllDepartments()
          {
@@ -122,9 +127,14 @@ namespace Link.Dev.IKEA.BLL.Services.Departments
         public bool DeleteDepartment(int id)
         {
             var department = _departmentRepository.GetById(id);
-            
             if (department is not null)
             {
+                var employess = _employeeRepository.GetAllAsIQueryable().Where(e => e.Department == department);
+
+                foreach (var employee  in employess)
+                {
+                    employee.DepartmentId = null;
+                }
                 return _departmentRepository.Delete(department) > 0;
             }
             return false;

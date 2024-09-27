@@ -1,5 +1,31 @@
-﻿@model UpdatedEmployeeDto
+﻿@model EmploeeViewModel
 
+@{
+    ViewData["Title"] = "Edit";
+    ViewBag.Action = "Edit";
+
+     var Departments = new SelectList(ViewData["Departments"] as IEnumerable<DepartmentToReturnDto>, nameof(DepartmentToReturnDto.Id), nameof(DepartmentToReturnDto.Name));
+}
+
+<div class="row justify-content-center align-items-center flex-column">
+    <h1 class="col-6 my-4">Edit Employee</h1>
+
+    <partial name="Partial/CreateEditEmployeePartial" model="@Model" />
+
+</div>
+
+@section ValidationScript {
+
+    <partial name="_ValidationScriptsPartial" />
+
+
+}
+
+ 
+
+
+@* 
+@model EmploeeViewModel
 @{
     ViewData["Title"] = "Edit";
     var Departments = new SelectList(ViewData["Departments"] as IEnumerable<DepartmentToReturnDto>, nameof(DepartmentToReturnDto.Id), nameof(DepartmentToReturnDto.Name));
@@ -107,12 +133,10 @@
         </div>
     </form>
 </div>
-
-@section ValidationScript {
+ *@
+@* @section ValidationScript {
 
     <partial name="_ValidationScriptsPartial" />
 
 
-}
-
- 
+} *@

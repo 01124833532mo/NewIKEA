@@ -1,4 +1,4 @@
-﻿@{
+﻿@* @{
     ViewData["Title"] = "Home Page";
 }
 
@@ -6,3 +6,86 @@
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+
+
+
+
+  *@
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="container-fluid p-0">
+    <div class="hero text-center d-flex flex-column justify-content-center align-items-center text-white">
+        <h1 class="display-3">Welcome to LinkDev.LKEA.Company</h1>
+        <p class="lead">Building modern web applications with ASP.NET Core</p>
+@*         <a href="https://learn.microsoft.com/aspnet/core" class="btn btn-primary btn-lg mt-3">Get Started</a>
+
+
+ *@   
+        <p class="lead">Simple Company MVC Project to talk about Communication between Entites At Company </p>
+
+
+</div>
+</div>
+
+<div class="container py-5 text-white">
+    <div class="row text-center">
+        <div class="col-md-4">
+            <i class="fas fa-cogs fa-3x mb-3"></i>
+            <h3>Powerful Framework</h3>
+            <p>ASP.NET Core is a powerful framework for building dynamic web applications.</p>
+        </div>
+        <div class="col-md-4">
+            <i class="fas fa-shield-alt fa-3x mb-3"></i>
+            <h3>Secure</h3>
+            <p>Ensure your web application is secure and scalable with ASP.NET Core's built-in security features.</p>
+        </div>
+        <div class="col-md-4">
+            <i class="fas fa-laptop-code fa-3x mb-3"></i>
+            <h3>Modern UI</h3>
+            <p>Create beautiful user interfaces with Bootstrap integration.</p>
+        </div>
+    </div>
+</div>
+
+<footer class="bg-dark text-white text-center py-3">
+    <p>&copy; 2024 LinkDev.IKEA.PL - All Rights Reserved</p>
+</footer>
+
+<style>
+    body, html {
+        height: 100%;
+        margin: 0;
+        background-color: #000; 
+    }
+
+    .hero {
+        background: linear-gradient(135deg, #2c3e50, #34495e); 
+        height: 100vh;
+        width: 100%; 
+    }
+
+        .hero h1 {
+            font-weight: bold;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        }
+
+    .services-section i {
+        color: #007bff;
+    }
+
+    .services-section h3 {
+        font-size: 1.5rem;
+        margin-bottom: 15px;
+    }
+
+    footer {
+        background-color: #222;
+    }
+</style>

@@ -59,12 +59,12 @@ if(employee is { })
 return false;
 		}
 
-		public IEnumerable<EmployeeToReturnDto> GetAllEmployes()
+		public IEnumerable<EmployeeToReturnDto> GetEmployes(string search)
 		{
 
 			return _employeeRepository
 				.GetAllAsIQueryable()
-				.Where(e=>!e.IsDeleted)
+				.Where(e=>!e.IsDeleted && (string.IsNullOrEmpty(search) || e.Name.ToLower().Contains(search.ToLower())))
 				.Include(e => e.Department)
 				.Select(emploee => new EmployeeToReturnDto
 			{
@@ -88,7 +88,7 @@ return false;
 
 		public EmployeeDetailsToReturnDto? GetEmployesById(int id)
 		{
-		var emploee = _employeeRepository.GetById(id); ;
+		var emploee = _employeeRepository.GetById(id); 
 			if(emploee is { })
 			{
 				return new EmployeeDetailsToReturnDto(){
@@ -103,7 +103,7 @@ return false;
 				HiringDate = emploee.HiringDate,
 				Gender = emploee.Gender,
 				EmployeeType =emploee.EmployeeType,
-					Department=emploee.Department.Name
+					Department=emploee.Department?.Name
 				};
 			}
 			else

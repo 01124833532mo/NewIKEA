@@ -24,9 +24,10 @@ namespace LinkDev.IKEA.PL.Controllers
 
 		[HttpGet]
 
-		public IActionResult Index()
+		public IActionResult Index(string search)
 		{
-			var employees = _employesService.GetAllEmployes();
+			var employees = _employesService.GetEmployes( search);
+
 
 			return View(employees);
 		}
@@ -42,15 +43,31 @@ namespace LinkDev.IKEA.PL.Controllers
 		
 		//[ValidateAntiForgeryToken]
 		[HttpPost]
-		public IActionResult Create(CreatedEmployeeDto employeeDto)
+		public IActionResult Create(EmploeeViewModel emploeeView)
 		{
-			
+			var Employee = new CreatedEmployeeDto()
+			{
+				Name= emploeeView.Name,
+				Gender= emploeeView.Gender,
+				DepartmentId= emploeeView.DepartmentId,
+				Adress	= emploeeView.Adress,
+				Age	= emploeeView.Age,
+				Email	= emploeeView.Email,
+				EmployeeType	= emploeeView.EmployeeType,
+				HiringDate	= emploeeView.HiringDate,
+				IsActive = emploeeView.IsActive,
+					PhoneNumber = emploeeView.PhoneNumber,
+					Salary= emploeeView.Salary,
+
+			};
+
+
 			if (!ModelState.IsValid)
-				return View(employeeDto);
+				return View(emploeeView);
 			var message = string.Empty;
 			try
 			{
-				var result = _employesService.CreateEmploye(employeeDto);
+				var result = _employesService.CreateEmploye(Employee);
 				if (result > 0)
 				{
 					TempData["Message"] = "Employee Is Created";
@@ -60,7 +77,6 @@ namespace LinkDev.IKEA.PL.Controllers
 				}
 				else
 				{
-					TempData["Message"] = "Employee is not Created";
 
 					message = "Employee is not Created";
 					ModelState.AddModelError(string.Empty, message);
@@ -73,7 +89,7 @@ namespace LinkDev.IKEA.PL.Controllers
 				if (_webHostEnvironment.IsDevelopment())
 				{
 					message = ex.Message;
-					return View(employeeDto);
+					return View(emploeeView);
 				}
 				else
 				{
@@ -118,9 +134,9 @@ namespace LinkDev.IKEA.PL.Controllers
 
 
             // Pass the fetched department data to the view
-            return View(new UpdatedEmployeeDto
+            return View(new EmploeeViewModel
             {
-				Id = employee.Id,
+				//Id = employee.Id,
 				Name = employee.Name,
 			
 				Adress=employee.Adress,
@@ -140,16 +156,33 @@ namespace LinkDev.IKEA.PL.Controllers
         [ValidateAntiForgeryToken]
 
         [HttpPost]
-		public IActionResult Edit([FromRoute] int id, UpdatedEmployeeDto emploee)
+		public IActionResult Edit([FromRoute] int id, EmploeeViewModel emploeeView)
 		{
+
+			var employee = new UpdatedEmployeeDto()
+			{
+Adress=emploeeView.Adress,
+Age=emploeeView.Age,
+	DepartmentId=emploeeView.DepartmentId,
+	Email=emploeeView.Email,
+	EmployeeType	= emploeeView.EmployeeType,
+	Gender =emploeeView.Gender,
+	HiringDate =emploeeView.HiringDate,
+	IsActive=emploeeView.IsActive,
+		PhoneNumber=emploeeView.PhoneNumber,
+				Name=emploeeView.Name,
+					Id	=id,
+				Salary=emploeeView.Salary,
+			};
+
 			if (!ModelState.IsValid)
 			{
-				return View(emploee);
+				return View(emploeeView);
 			}
 			var message = string.Empty;
 			try
 			{
-				var updated = _employesService.UpdateEmploye(emploee) > 0;
+				var updated = _employesService.UpdateEmploye(employee) > 0;
 
 				if (updated)
 				{
@@ -174,7 +207,7 @@ namespace LinkDev.IKEA.PL.Controllers
 
 			}
 			ModelState.AddModelError(string.Empty, message);
-			return View(emploee);
+			return View(emploeeView);
 		}
         //[HttpGet]
         //public IActionResult Delete(int? id)

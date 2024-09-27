@@ -54,17 +54,15 @@ namespace LinkDev.IKEA.PL.Controllers
 
                 };
                 var created = _depratmentService.CreateDepartment(createdDepartment) >0 ;
-                if (!created)
+                if (created)
                 {
-                    TempData["Message"] = "Department Is not Created";
+                    TempData["Message2"] = "Department is created";
+                    return RedirectToAction(nameof(Index));
+
                 }
 
 
-                TempData["Message2"] = "Department is created";
-					ModelState.AddModelError(string.Empty, message);
-					return View(department);
-				
-			
+
 
 
 
@@ -75,13 +73,16 @@ namespace LinkDev.IKEA.PL.Controllers
             {
                 _logger.LogError(ex, ex.Message);
 
-                message = _webHostEnvironment.IsDevelopment() ? ex.Message : "Department is not created";
-                TempData["Message"] = message;
-                return RedirectToAction(nameof(Index));
+                message = _webHostEnvironment.IsDevelopment() ? ex.Message : "an error has occured during Creating the department";
+
             }
+            ModelState.AddModelError(string.Empty, message);
+
+            return RedirectToAction(nameof(Index));
+
         }
 
-		public IActionResult Details(int? id)
+        public IActionResult Details(int? id)
 		{
 			if (id == null)
 			{
@@ -221,7 +222,7 @@ namespace LinkDev.IKEA.PL.Controllers
 
                 message = _webHostEnvironment.IsDevelopment() ? ex.Message : "an error has occured during deleting the department";
             }
-            //ModelState.AddModelError(string.Empty, message);
+            ModelState.AddModelError(string.Empty, message);
 
             // shoud use torser and use tempedata[]
             return RedirectToAction(nameof(Index));
