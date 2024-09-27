@@ -3,6 +3,7 @@ using Link.Dev.IKEA.DAL.Persistence.Repositories.Departments;
 using LinkDev.IKEA.BLL.Servcies.Employees;
 using LinkDev.IKEA.DAL.Entites.Departments;
 using LinkDev.IKEA.DAL.Persistance.Repositories.Employees;
+using LinkDev.IKEA.DAL.Persistance.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -13,13 +14,11 @@ namespace Link.Dev.IKEA.BLL.Services.Departments
 {
     public class DepartmentService : IDepratmentService
     {
-        private readonly IDepartmentRepository _departmentRepository;
-        private readonly IEmployeeRepository _employeeRepository;
+		private readonly IUnitOfWork _unitOfWork;
 
-        public DepartmentService(IDepartmentRepository departmentRepository ,IEmployeeRepository employeeRepository)
+        public DepartmentService(IUnitOfWork unitOfWork )
         {
-            _departmentRepository = departmentRepository;
-            _employeeRepository = employeeRepository;
+			_unitOfWork = unitOfWork;
         }
         public IEnumerable<DepartmentToReturnDto> GetAllDepartments()
          {
@@ -51,7 +50,7 @@ namespace Link.Dev.IKEA.BLL.Services.Departments
 
 
 
-            var Departments2 = _departmentRepository.GetAllAsIQueryable().Where(d => !d.IsDeleted).Select(D => new DepartmentToReturnDto
+            var Departments2 = _unitOfWork.DepartmentRepository.GetAllAsIQueryable().Where(d => !d.IsDeleted).Select(D => new DepartmentToReturnDto
             {
                 Id = D.Id,
                 Code = D.Code,
@@ -63,7 +62,7 @@ namespace Link.Dev.IKEA.BLL.Services.Departments
         }
         public IEnumerable<DepartmentToReturnDto> GetAllDepartmentsIQueryable()
         {
-            var Departments = _departmentRepository.GetAllAsIQueryable().Select(D => new DepartmentToReturnDto
+            var Departments = _unitOfWork.DepartmentRepository.GetAllAsIQueryable().Select(D => new DepartmentToReturnDto
             {
                 Id = D.Id,
                 Code = D.Code,
@@ -75,7 +74,7 @@ namespace Link.Dev.IKEA.BLL.Services.Departments
         }
         public DepartmentDetailsToReturnDto? GetDepartmentsById(int id)
         {
-            var department = _departmentRepository.GetById(id);
+            var department = _unitOfWork.DepartmentRepository.GetById(id);
             if (department is not null)
                 return new DepartmentDetailsToReturnDto
                 {
@@ -103,7 +102,8 @@ namespace Link.Dev.IKEA.BLL.Services.Departments
                 LastModifiedBy = 1,
                 //LastModifiedOn = DepartmentDto.LastModifiedOn,
             };
-            return _departmentRepository.Add(department);
+             _unitOfWork.DepartmentRepository.Add(department);
+            return _unitOfWork.Complete();
         }
         public int UpdateDepartment(UpdatedDepartmentDto DepartmentDto)
         {
@@ -121,21 +121,26 @@ namespace Link.Dev.IKEA.BLL.Services.Departments
 
 
             };
-            return _departmentRepository.Update(department);
+             _unitOfWork.DepartmentRepository.Update(department);
 
+            return _unitOfWork.Complete();
         }
         public bool DeleteDepartment(int id)
         {
-            var department = _departmentRepository.GetById(id);
+            var DepartmentUnit = _unitOfWork.DepartmentRepository;
+
+            var department = DepartmentUnit.GetById(id);
             if (department is not null)
             {
-                var employess = _employeeRepository.GetAllAsIQueryable().Where(e => e.Department == department);
+                var employess = _unitOfWork.EmployeeRepository.GetAllAsIQueryable().Where(e => e.Department == department);
 
                 foreach (var employee  in employess)
                 {
                     employee.DepartmentId = null;
                 }
-                return _departmentRepository.Delete(department) > 0;
+                 DepartmentUnit.Delete(department) ;
+
+                return _unitOfWork.Complete() > 0;
             }
             return false;
         }
