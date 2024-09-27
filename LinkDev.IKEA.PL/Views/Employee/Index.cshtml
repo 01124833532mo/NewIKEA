@@ -1,9 +1,7 @@
 ﻿@model IEnumerable<EmployeeToReturnDto>
-
 @{
 	ViewData["Title"] = "Employees";
 
-	
 }
 
 <h1>All Employees </h1>
@@ -35,22 +33,16 @@
 
 <br />
 
-<form asp-action="Index" method="get" class="mt-5 row justify-content-center align-items-center "  >
-
-	<div class="row col-8 " >
+<form asp-action="Index" method="get" class="mt-5 row justify-content-center align-items-center ">
+	<div class="row col-8 ">
 		<div class="col-8">
 			<input type="text" name="search" class="form-control " id="searchInd" placeholder="Search By Name" />
 		</div>
 		<div class="col-4">
 			<input type="submit" value="Search" class="btn btn-success" />
-
 		</div>
-
 	</div>
-
-
 </form>
-
 @if (Model.Count() > 0)
 {
 	<table class=" mt-4 table table-striped table-hover">
@@ -90,7 +82,7 @@
 
 				<tr>
 
-					<td>@Html.DisplayFor(x=> @item.Name)</td>
+					<td>@Html.DisplayFor(x => @item.Name)</td>
 					<td>@Html.DisplayFor(x => @item.Email)</td>
 					<td>@Html.DisplayFor(x => @item.Department)</td>
 
@@ -142,9 +134,7 @@ else
 }
 
 
-						
 
 
-				
 
-							
+

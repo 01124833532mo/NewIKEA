@@ -1,4 +1,5 @@
-﻿using Link.Dev.IKEA.BLL.Models.Departments;
+﻿using AutoMapper;
+using Link.Dev.IKEA.BLL.Models.Departments;
 using Link.Dev.IKEA.BLL.Services.Departments;
 using LinkDev.IKEA.DAL.Entites.Departments;
 using LinkDev.IKEA.PL.ViewModels;
@@ -11,12 +12,15 @@ namespace LinkDev.IKEA.PL.Controllers
         private readonly IDepratmentService _depratmentService;
         private readonly ILogger _logger;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        public DepartmentController(IDepratmentService depratmentService, ILogger<DepartmentController> logger, IWebHostEnvironment webHostEnvironment)
+		private readonly IMapper _mapper;
+
+		public DepartmentController(IDepratmentService depratmentService, ILogger<DepartmentController> logger, IWebHostEnvironment webHostEnvironment,IMapper mapper)
         {
             _depratmentService = depratmentService;
             _logger = logger;
             _webHostEnvironment = webHostEnvironment;
-        }
+			_mapper = mapper;
+		}
         [HttpGet]
 
         public IActionResult Index()
@@ -45,14 +49,7 @@ namespace LinkDev.IKEA.PL.Controllers
             var message = string.Empty;
             try
             {
-                var createdDepartment = new CreatedDepartmentDto
-                {
-                    Code = department.Code,
-                    Name = department.Name,
-                    CreationDate = department.CreationDate,
-                    Description = department.Description
-
-                };
+                var createdDepartment =_mapper.Map<DepartmentViewModel,CreatedDepartmentDto>(department) ;
                 var created = _depratmentService.CreateDepartment(createdDepartment) >0 ;
                 if (created)
                 {
@@ -60,6 +57,15 @@ namespace LinkDev.IKEA.PL.Controllers
                     return RedirectToAction(nameof(Index));
 
                 }
+                else
+                {
+					message = "Department is not created";
+					ModelState.AddModelError(string.Empty, message);
+					return View(department);
+                   
+
+
+				}
 
 
 
@@ -68,7 +74,7 @@ namespace LinkDev.IKEA.PL.Controllers
 
 
 
-            }
+			}
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
@@ -76,7 +82,6 @@ namespace LinkDev.IKEA.PL.Controllers
                 message = _webHostEnvironment.IsDevelopment() ? ex.Message : "an error has occured during Creating the department";
 
             }
-            ModelState.AddModelError(string.Empty, message);
 
             return RedirectToAction(nameof(Index));
 
@@ -112,20 +117,9 @@ namespace LinkDev.IKEA.PL.Controllers
             {
                 return NotFound();  // Return 404 if the department is not found
             }
-
+            var departmentvm = _mapper.Map<DepartmentDetailsToReturnDto, DepartmentViewModel>(department);
             // Pass the fetched department data to the view
-            return View(new DepartmentViewModel
-            {
-                Code = department.Code,
-                //Id = department.Id,
-                Name = department.Name,
-                CreationDate = department.CreationDate,
-                Description = department.Description,
-
-
-
-
-            });
+            return View(departmentvm);
         }
         [ValidateAntiForgeryToken]
 
@@ -139,15 +133,7 @@ namespace LinkDev.IKEA.PL.Controllers
             var message = string.Empty;
             try
             {
-                var departmenttoUpdate = new UpdatedDepartmentDto
-                {
-                    Code = departmentVm.Code,
-                    Id = id,
-                    Name = departmentVm.Name,
-                    CreationDate = departmentVm.CreationDate,
-                    Description = departmentVm.Description
-
-                };
+                var departmenttoUpdate = _mapper.Map<DepartmentViewModel,UpdatedDepartmentDto>(departmentVm) ;
                 var updated = _depratmentService.UpdateDepartment(departmenttoUpdate) > 0;
                 if (updated)
                 {
