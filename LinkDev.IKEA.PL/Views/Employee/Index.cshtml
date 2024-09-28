@@ -1,6 +1,7 @@
-﻿@model IEnumerable<EmployeeToReturnDto>
+﻿ @model IEnumerable<EmployeeToReturnDto>
 @{
 	ViewData["Title"] = "Employees";
+
 }
 
 <h1>All Employees </h1>
@@ -9,11 +10,39 @@
 
 <br />
 
+@if (!string.IsNullOrEmpty(TempData["Message"] as string))
+{
+	<div class="toast-container position-fixed bottom-0 end-0 p-3">
+		<div id="liveToast" class="toast show fade" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000">
+			<div class="toast-header bg-primary text-white">
+				<img src="https://via.placeholder.com/20" class="rounded me-2" alt="IKEA Logo">
+				<strong class="me-auto">IKEA</strong>
+				<small class="text-muted">Just now</small>
+				<button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+			</div>
+			<div class="toast-body bg-light">
+				<i class="bi bi-info-circle-fill text-primary"></i> @TempData["Message"]
+			</div>
+		</div>
+	</div>
+}
+
+
 
 <a asp-controller="Employee" asp-action="Create" class="btn btn-primary"> Create New Employee </a>
 
 <br />
 
+<form asp-action="Index" method="get" class="mt-5 row justify-content-center align-items-center ">
+	<div class="row col-8 ">
+		<div class="col-8">
+			<input type="text" name="search" class="form-control " id="searchInd" placeholder="Search By Name" />
+		</div>
+		<div class="col-4">
+			<input type="submit" value="Search" class="btn btn-success" />
+		</div>
+	</div>
+</form>
 @if (Model.Count() > 0)
 {
 	<table class=" mt-4 table table-striped table-hover">
@@ -53,7 +82,7 @@
 
 				<tr>
 
-					<td>@Html.DisplayFor(x=> @item.Name)</td>
+					<td>@Html.DisplayFor(x => @item.Name)</td>
 					<td>@Html.DisplayFor(x => @item.Email)</td>
 					<td>@Html.DisplayFor(x => @item.Department)</td>
 
@@ -104,10 +133,31 @@ else
 	</div>
 }
 
+<script>
+	
 
-						
+	 const searchBar = $('#searchInd');
+	const tableBody = $('table tbody');
+	searchBar.on('keyup', function () {
+		var searchValue = searchBar.val();
+
+		$.ajax({
+			url: '/Employee/Search',
+			type: 'GET',
+			data: { search: searchValue }, // Match the name attribute in form
+			success: function (result) {
+				tableBody.html(result); // Update only the tbody, not the whole table
+			},
+			error: function (xhr, status, error) {
+				console.log(error);
+			}
+		});
+	});
 
 
-				
+</script>
 
-							
+
+
+
+

@@ -4,6 +4,7 @@ using LinkDev.IKEA.BLL.Models.Employees;
 using LinkDev.IKEA.DAL.Common.Enums;
 using LinkDev.IKEA.DAL.Entites.Employees;
 using LinkDev.IKEA.DAL.Persistance.Repositories.Employees;
+using LinkDev.IKEA.DAL.Persistance.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -15,11 +16,11 @@ namespace LinkDev.IKEA.BLL.Servcies.Employees
 {
 	public class EmployeeService : IEmployesService
 	{
-		private readonly IEmployeeRepository _employeeRepository;
+		private readonly IUnitOfWork _unitOfWork;
 
-		public EmployeeService(IEmployeeRepository employeeRepository)
+		public EmployeeService(IUnitOfWork unitOfWork)
         {
-			_employeeRepository = employeeRepository;
+			_unitOfWork = unitOfWork;
 		}
         public int CreateEmploye(CreatedEmployeeDto employeeDto)
 		{
@@ -44,28 +45,31 @@ namespace LinkDev.IKEA.BLL.Servcies.Employees
 
 			};
 
-			return _employeeRepository.Add(employee);
-
+			 _unitOfWork.EmployeeRepository.Add(employee);
+		return	_unitOfWork.Complete();
 		}
 
 		public bool DeleteEmploye(int id)
 		{
-			var employee = _employeeRepository.GetById(id);
+			var employeeUnit = _unitOfWork.EmployeeRepository;
+
+			var employee = employeeUnit.GetById(id);
 if(employee is { })
 			{
-				return _employeeRepository.Delete(employee) > 0;
+				 employeeUnit.Delete(employee) ;
+				return _unitOfWork.Complete()>0;
 			}
 
 return false;
 		}
 
-		public IEnumerable<EmployeeToReturnDto> GetAllEmployes()
+		public IEnumerable<EmployeeToReturnDto> GetEmployes(string search)
 		{
 
-			return _employeeRepository
+			return _unitOfWork.EmployeeRepository
 				.GetAllAsIQueryable()
-				.Where(e=>!e.IsDeleted)
-				.Include(e=>e.Department)
+				.Where(e=>!e.IsDeleted && (string.IsNullOrEmpty(search) || e.Name.ToLower().Contains(search.ToLower())))
+				.Include(e => e.Department)
 				.Select(emploee => new EmployeeToReturnDto
 			{
 
@@ -88,7 +92,7 @@ return false;
 
 		public EmployeeDetailsToReturnDto? GetEmployesById(int id)
 		{
-		var emploee = _employeeRepository.GetById(id); ;
+		var emploee = _unitOfWork.EmployeeRepository.GetById(id); 
 			if(emploee is { })
 			{
 				return new EmployeeDetailsToReturnDto(){
@@ -103,7 +107,7 @@ return false;
 				HiringDate = emploee.HiringDate,
 				Gender = emploee.Gender,
 				EmployeeType =emploee.EmployeeType,
-					Department=emploee.Department.Name
+					Department=emploee.Department?.Name
 				};
 			}
 			else
@@ -133,8 +137,9 @@ return false;
 				DepartmentId= employeeDto.DepartmentId,
 
 			};
-			return _employeeRepository.Update(employee);
+			 _unitOfWork.EmployeeRepository.Update(employee);
 
+			return _unitOfWork.Complete();
 		}
 	}
 }

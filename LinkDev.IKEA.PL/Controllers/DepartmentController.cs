@@ -1,8 +1,10 @@
-﻿using Link.Dev.IKEA.BLL.Models.Departments;
+﻿using AutoMapper;
+using Link.Dev.IKEA.BLL.Models.Departments;
 using Link.Dev.IKEA.BLL.Services.Departments;
 using LinkDev.IKEA.DAL.Entites.Departments;
 using LinkDev.IKEA.PL.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 namespace LinkDev.IKEA.PL.Controllers
 {
     public class DepartmentController : Controller
@@ -10,12 +12,15 @@ namespace LinkDev.IKEA.PL.Controllers
         private readonly IDepratmentService _depratmentService;
         private readonly ILogger _logger;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        public DepartmentController(IDepratmentService depratmentService, ILogger<DepartmentController> logger, IWebHostEnvironment webHostEnvironment)
+		private readonly IMapper _mapper;
+
+		public DepartmentController(IDepratmentService depratmentService, ILogger<DepartmentController> logger, IWebHostEnvironment webHostEnvironment,IMapper mapper)
         {
             _depratmentService = depratmentService;
             _logger = logger;
             _webHostEnvironment = webHostEnvironment;
-        }
+			_mapper = mapper;
+		}
         [HttpGet]
 
         public IActionResult Index()
@@ -44,43 +49,45 @@ namespace LinkDev.IKEA.PL.Controllers
             var message = string.Empty;
             try
             {
-                var createdDepartment = new CreatedDepartmentDto
-                {
-                    Code = department.Code,
-                    Name = department.Name,
-                    CreationDate = department.CreationDate,
-                    Description = department.Description
-
-                };
+                var createdDepartment =_mapper.Map<DepartmentViewModel,CreatedDepartmentDto>(department) ;
                 var created = _depratmentService.CreateDepartment(createdDepartment) >0 ;
-                if (!created)
+                if (created)
                 {
-                    TempData["Message"] = "Department Is not Created";
+                    TempData["Message2"] = "Department is created";
+                    return RedirectToAction(nameof(Index));
+
                 }
-
-
-                TempData["Message2"] = "Department is created";
+                else
+                {
+					message = "Department is not created";
 					ModelState.AddModelError(string.Empty, message);
 					return View(department);
-				
-			
+                   
+
+
+				}
 
 
 
 
 
-            }
+
+
+
+			}
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
 
-                message = _webHostEnvironment.IsDevelopment() ? ex.Message : "Department is not created";
-                TempData["Message"] = message;
-                return RedirectToAction(nameof(Index));
+                message = _webHostEnvironment.IsDevelopment() ? ex.Message : "an error has occured during Creating the department";
+
             }
+
+            return RedirectToAction(nameof(Index));
+
         }
 
-		public IActionResult Details(int? id)
+        public IActionResult Details(int? id)
 		{
 			if (id == null)
 			{
@@ -110,20 +117,9 @@ namespace LinkDev.IKEA.PL.Controllers
             {
                 return NotFound();  // Return 404 if the department is not found
             }
-
+            var departmentvm = _mapper.Map<DepartmentDetailsToReturnDto, DepartmentViewModel>(department);
             // Pass the fetched department data to the view
-            return View(new DepartmentViewModel
-            {
-                Code = department.Code,
-                //Id = department.Id,
-                Name = department.Name,
-                CreationDate = department.CreationDate,
-                Description = department.Description,
-
-
-
-
-            });
+            return View(departmentvm);
         }
         [ValidateAntiForgeryToken]
 
@@ -137,15 +133,7 @@ namespace LinkDev.IKEA.PL.Controllers
             var message = string.Empty;
             try
             {
-                var departmenttoUpdate = new UpdatedDepartmentDto
-                {
-                    Code = departmentVm.Code,
-                    Id = id,
-                    Name = departmentVm.Name,
-                    CreationDate = departmentVm.CreationDate,
-                    Description = departmentVm.Description
-
-                };
+                var departmenttoUpdate = _mapper.Map<DepartmentViewModel,UpdatedDepartmentDto>(departmentVm) ;
                 var updated = _depratmentService.UpdateDepartment(departmenttoUpdate) > 0;
                 if (updated)
                 {
@@ -204,9 +192,14 @@ namespace LinkDev.IKEA.PL.Controllers
                 var deleted = _depratmentService.DeleteDepartment(id);
                 if (deleted)
                 {
+                    TempData["Message"]="The Department is Deleted";
                     return RedirectToAction(nameof(Index));
                 }
-                message = "an error has occured during deleting the department";
+                else
+                {
+                    TempData["Message"] = "an error has occured during deleting the department";
+
+                }
             }
             catch (Exception ex)
             {
@@ -215,7 +208,7 @@ namespace LinkDev.IKEA.PL.Controllers
 
                 message = _webHostEnvironment.IsDevelopment() ? ex.Message : "an error has occured during deleting the department";
             }
-            //ModelState.AddModelError(string.Empty, message);
+            ModelState.AddModelError(string.Empty, message);
 
             // shoud use torser and use tempedata[]
             return RedirectToAction(nameof(Index));

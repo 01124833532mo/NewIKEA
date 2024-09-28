@@ -2,6 +2,7 @@
 using Link.Dev.IKEA.BLL.Services.Departments;
 using LinkDev.IKEA.BLL.Models.Employees;
 using LinkDev.IKEA.BLL.Servcies.Employees;
+using LinkDev.IKEA.DAL.Entites.Employees;
 using LinkDev.IKEA.PL.ViewModels;
 using LinkDev.IKEA.PL.ViewModels.Employee;
 using Microsoft.AspNetCore.Mvc;
@@ -23,11 +24,21 @@ namespace LinkDev.IKEA.PL.Controllers
 
 		[HttpGet]
 
-		public IActionResult Index()
+		public IActionResult Index(string search)
 		{
-			var employees = _employesService.GetAllEmployes();
+			var employees = _employesService.GetEmployes( search);
+
 
 			return View(employees);
+		}
+
+		[HttpGet]
+		public IActionResult Search (string search)
+		{
+			var employees = _employesService.GetEmployes(search);
+
+
+			return PartialView("Partial/EmployeesSearchByAjax", employees);
 		}
 
 		[HttpGet]
@@ -38,21 +49,44 @@ namespace LinkDev.IKEA.PL.Controllers
 			//ViewData["Departments"] = depratmentService.GetAllDepartments();
 			return View();
 		}
-
+		
 		//[ValidateAntiForgeryToken]
 		[HttpPost]
-		public IActionResult Create(CreatedEmployeeDto employeeDto)
+		public IActionResult Create(EmploeeViewModel emploeeView)
 		{
+			var Employee = new CreatedEmployeeDto()
+			{
+				Name= emploeeView.Name,
+				Gender= emploeeView.Gender,
+				DepartmentId= emploeeView.DepartmentId,
+				Adress	= emploeeView.Adress,
+				Age	= emploeeView.Age,
+				Email	= emploeeView.Email,
+				EmployeeType	= emploeeView.EmployeeType,
+				HiringDate	= emploeeView.HiringDate,
+				IsActive = emploeeView.IsActive,
+					PhoneNumber = emploeeView.PhoneNumber,
+					Salary= emploeeView.Salary,
+
+			};
+
+
 			if (!ModelState.IsValid)
-				return View(employeeDto);
+				return View(emploeeView);
 			var message = string.Empty;
 			try
 			{
-				var result = _employesService.CreateEmploye(employeeDto);
+				var result = _employesService.CreateEmploye(Employee);
 				if (result > 0)
+				{
+					TempData["Message"] = "Employee Is Created";
+
 					return RedirectToAction(nameof(Index));
+
+				}
 				else
 				{
+
 					message = "Employee is not Created";
 					ModelState.AddModelError(string.Empty, message);
 					return View(result);
@@ -64,7 +98,7 @@ namespace LinkDev.IKEA.PL.Controllers
 				if (_webHostEnvironment.IsDevelopment())
 				{
 					message = ex.Message;
-					return View(employeeDto);
+					return View(emploeeView);
 				}
 				else
 				{
@@ -109,9 +143,9 @@ namespace LinkDev.IKEA.PL.Controllers
 
 
             // Pass the fetched department data to the view
-            return View(new UpdatedEmployeeDto
+            return View(new EmploeeViewModel
             {
-				Id = employee.Id,
+				//Id = employee.Id,
 				Name = employee.Name,
 			
 				Adress=employee.Adress,
@@ -131,22 +165,47 @@ namespace LinkDev.IKEA.PL.Controllers
         [ValidateAntiForgeryToken]
 
         [HttpPost]
-		public IActionResult Edit([FromRoute] int id, UpdatedEmployeeDto emploee)
+		public IActionResult Edit([FromRoute] int id, EmploeeViewModel emploeeView)
 		{
+
+			var employee = new UpdatedEmployeeDto()
+			{
+Adress=emploeeView.Adress,
+Age=emploeeView.Age,
+	DepartmentId=emploeeView.DepartmentId,
+	Email=emploeeView.Email,
+	EmployeeType	= emploeeView.EmployeeType,
+	Gender =emploeeView.Gender,
+	HiringDate =emploeeView.HiringDate,
+	IsActive=emploeeView.IsActive,
+		PhoneNumber=emploeeView.PhoneNumber,
+				Name=emploeeView.Name,
+					Id	=id,
+				Salary=emploeeView.Salary,
+			};
+
 			if (!ModelState.IsValid)
 			{
-				return View(emploee);
+				return View(emploeeView);
 			}
 			var message = string.Empty;
 			try
 			{
-				var updated = _employesService.UpdateEmploye(emploee) > 0;
+				var updated = _employesService.UpdateEmploye(employee) > 0;
+
 				if (updated)
 				{
+					TempData["Message"] = "Employee Is Updated";
 					return RedirectToAction(nameof(Index));
 				}
+				else
+				{
+					TempData["Message"] = "Employee Is Not Updated";
 
-				message = "an error has occured during updating the employee";
+
+
+				}
+
 			}
 			catch (Exception ex)
 			{
@@ -157,7 +216,7 @@ namespace LinkDev.IKEA.PL.Controllers
 
 			}
 			ModelState.AddModelError(string.Empty, message);
-			return View(emploee);
+			return View(emploeeView);
 		}
         //[HttpGet]
         //public IActionResult Delete(int? id)
@@ -188,9 +247,16 @@ namespace LinkDev.IKEA.PL.Controllers
 				var employee = _employesService.DeleteEmploye(id);
 				if (employee)
 				{
+					TempData["Message"] = "Employee Is Deleted";
 					return RedirectToAction(nameof(Index));
 				}
-				message = "an error has occured during deleting the emploee";
+				else
+				{
+					TempData["Message"] = "Employee Is Not Deleted";
+
+					message = "an error has occured during deleting the emploee";
+
+				}
 			}
 			catch (Exception ex)
 			{
