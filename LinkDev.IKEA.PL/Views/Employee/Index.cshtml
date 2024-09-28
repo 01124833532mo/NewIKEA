@@ -133,6 +133,29 @@ else
 	</div>
 }
 
+<script>
+	
+
+	 const searchBar = $('#searchInd');
+	const tableBody = $('table tbody');
+	searchBar.on('keyup', function () {
+		var searchValue = searchBar.val();
+
+		$.ajax({
+			url: '/Employee/Search',
+			type: 'GET',
+			data: { search: searchValue }, // Match the name attribute in form
+			success: function (result) {
+				tableBody.html(result); // Update only the tbody, not the whole table
+			},
+			error: function (xhr, status, error) {
+				console.log(error);
+			}
+		});
+	});
+
+
+</script>
 
 
 

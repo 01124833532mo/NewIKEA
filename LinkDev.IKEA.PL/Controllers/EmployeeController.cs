@@ -33,6 +33,15 @@ namespace LinkDev.IKEA.PL.Controllers
 		}
 
 		[HttpGet]
+		public IActionResult Search (string search)
+		{
+			var employees = _employesService.GetEmployes(search);
+
+
+			return PartialView("Partial/EmployeesSearchByAjax", employees);
+		}
+
+		[HttpGet]
 
 		// injection Idepartmentservice at view or PartialView
 		public IActionResult Create(/*[FromServices] IDepratmentService depratmentService*/)
