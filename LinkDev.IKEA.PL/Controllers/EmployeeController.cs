@@ -24,18 +24,18 @@ namespace LinkDev.IKEA.PL.Controllers
 
 		[HttpGet]
 
-		public IActionResult Index(string search)
+		public async Task <IActionResult> Index(string search)
 		{
-			var employees = _employesService.GetEmployes( search);
+			var employees = await _employesService.GetEmployesAsynce( search);
 
 
 			return View(employees);
 		}
 
 		[HttpGet]
-		public IActionResult Search (string search)
+		public async Task <IActionResult> Search (string search)
 		{
-			var employees = _employesService.GetEmployes(search);
+			var employees = await _employesService.GetEmployesAsynce(search);
 
 
 			return PartialView("Partial/EmployeesSearchByAjax", employees);
@@ -52,7 +52,7 @@ namespace LinkDev.IKEA.PL.Controllers
 		
 		//[ValidateAntiForgeryToken]
 		[HttpPost]
-		public IActionResult Create(EmploeeViewModel emploeeView)
+		public async Task <IActionResult> Create(EmploeeViewModel emploeeView)
 		{
 			var Employee = new CreatedEmployeeDto()
 			{
@@ -67,7 +67,7 @@ namespace LinkDev.IKEA.PL.Controllers
 				IsActive = emploeeView.IsActive,
 					PhoneNumber = emploeeView.PhoneNumber,
 					Salary= emploeeView.Salary,
-
+					Image= emploeeView.Image,
 			};
 
 
@@ -76,7 +76,7 @@ namespace LinkDev.IKEA.PL.Controllers
 			var message = string.Empty;
 			try
 			{
-				var result = _employesService.CreateEmploye(Employee);
+				var result = await _employesService.CreateEmployeAsynce(Employee);
 				if (result > 0)
 				{
 					TempData["Message"] = "Employee Is Created";
@@ -108,13 +108,13 @@ namespace LinkDev.IKEA.PL.Controllers
 			}
 		}
 		[HttpGet]
-		public IActionResult Details(int? id)
+		public async Task <IActionResult> Details(int? id)
 		{
 			if (id == null)
 			{
 				return BadRequest();
 			}
-			var employee = _employesService.GetEmployesById(id.Value);
+			var employee = await _employesService.GetEmployesByIdAsynce(id.Value);
 			if (employee == null)
 			{
 				return NotFound();
@@ -123,7 +123,7 @@ namespace LinkDev.IKEA.PL.Controllers
 		}
 
         [HttpGet]
-		public IActionResult Edit(int? id,[FromServices] IDepratmentService depratmentService)
+		public async Task <IActionResult> Edit(int? id,[FromServices] IDepratmentService depratmentService)
 		{
 
 			if (id is null)
@@ -131,7 +131,7 @@ namespace LinkDev.IKEA.PL.Controllers
 				return BadRequest();
 			}
 
-			var employee = _employesService.GetEmployesById(id.Value);
+			var employee = await _employesService.GetEmployesByIdAsynce(id.Value);
 
 			// Check if department exists
 			if (employee == null)
@@ -139,7 +139,7 @@ namespace LinkDev.IKEA.PL.Controllers
 				return NotFound();  // Return 404 if the department is not found
 			}
 
-            ViewData["Departments"] = depratmentService.GetAllDepartments();
+            ViewData["Departments"] = await depratmentService.GetAllDepartmentsAsynce();
 
 
             // Pass the fetched department data to the view
@@ -165,7 +165,7 @@ namespace LinkDev.IKEA.PL.Controllers
         [ValidateAntiForgeryToken]
 
         [HttpPost]
-		public IActionResult Edit([FromRoute] int id, EmploeeViewModel emploeeView)
+		public async Task <IActionResult> Edit([FromRoute] int id, EmploeeViewModel emploeeView)
 		{
 
 			var employee = new UpdatedEmployeeDto()
@@ -191,7 +191,7 @@ Age=emploeeView.Age,
 			var message = string.Empty;
 			try
 			{
-				var updated = _employesService.UpdateEmploye(employee) > 0;
+				var updated = await _employesService.UpdateEmployeAsynce(employee) > 0;
 
 				if (updated)
 				{
@@ -238,13 +238,13 @@ Age=emploeeView.Age,
 
         [HttpPost]
 
-		public IActionResult Delete(int id)
+		public async Task <IActionResult> Delete(int id)
 		{
 			var message = string.Empty;
 
 			try
 			{
-				var employee = _employesService.DeleteEmploye(id);
+				var employee = await _employesService.DeleteEmployeAsynce(id);
 				if (employee)
 				{
 					TempData["Message"] = "Employee Is Deleted";

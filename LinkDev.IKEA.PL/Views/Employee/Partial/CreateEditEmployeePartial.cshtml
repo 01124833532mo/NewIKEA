@@ -2,10 +2,10 @@
 @inject IDepratmentService _departmentsevice
 
 @{
-    var Departments = new SelectList(_departmentsevice.GetAllDepartments(), nameof(DepartmentToReturnDto.Id), nameof(DepartmentToReturnDto.Name));
+    var Departments = new SelectList(await _departmentsevice.GetAllDepartmentsAsynce(), nameof(DepartmentToReturnDto.Id), nameof(DepartmentToReturnDto.Name));
 
 }
-<form asp-action="@ViewBag.Action" method="post" class="col-6">
+<form asp-action="@ViewBag.Action" method="post" class="col-6" enctype="multipart/form-data">
     <div asp-validation-summary="ModelOnly"></div>
 
     <!-- Name and Email on the same row -->
@@ -50,6 +50,7 @@
         </div>
     </div>
 
+   
 
 
     <div class="col-sm-6 mb-3">
@@ -100,6 +101,12 @@
             <label class="form-check-label" asp-for="IsActive"></label>
         </div>
     </div>
+
+    <div class="col-sm-6">
+        <label class="form-label" asp-for="Image"></label>
+        <input asp-for="Image" class="form-control mb-3" />
+@*         <span asp-validation-for="Image" class="text-danger"></span>
+ *@    </div>
 
     <!-- Submit and Back Buttons -->
     @if(ViewBag.Action == "Create")
