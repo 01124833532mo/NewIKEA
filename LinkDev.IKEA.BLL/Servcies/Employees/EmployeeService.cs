@@ -89,7 +89,8 @@ return false;
 			
 				Gender = emploee.Gender.ToString(),
 				EmployeeType = emploee.EmployeeType.ToString() ,
-				Department=emploee.Department.Name
+				Department=emploee.Department.Name,
+				Image=emploee.Image,
 			}).ToList();
 			//var employee = result.ToList();
 			//var emploee2 = result.FirstOrDefault();
@@ -114,8 +115,11 @@ return false;
 				HiringDate = emploee.HiringDate,
 				Gender = emploee.Gender,
 				EmployeeType =emploee.EmployeeType,
-					Department=emploee.Department?.Name
-				};
+					Department=emploee.Department?.Name,
+
+                                    Image = emploee.Image,
+
+                };
 			}
 			else
 			{
