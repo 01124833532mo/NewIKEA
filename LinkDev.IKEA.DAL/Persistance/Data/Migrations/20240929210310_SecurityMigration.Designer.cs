@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LinkDev.IKEA.DAL.Persistance.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240929201149_SecurityMigration")]
+    [Migration("20240929210310_SecurityMigration")]
     partial class SecurityMigration
     {
         /// <inheritdoc />
@@ -113,6 +113,9 @@ namespace LinkDev.IKEA.DAL.Persistance.Data.Migrations
 
                     b.Property<DateOnly>("HiringDate")
                         .HasColumnType("date");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");

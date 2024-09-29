@@ -1,11 +1,14 @@
 using Link.Dev.IKEA.BLL.Services.Departments;
 using Link.Dev.IKEA.DAL.Data;
 using Link.Dev.IKEA.DAL.Persistence.Repositories.Departments;
+using LinkDev.IKEA.BLL.Common.Services.Attachments;
 using LinkDev.IKEA.BLL.Servcies.Employees;
 using LinkDev.IKEA.DAL.Persistance.Repositories.Employees;
 using LinkDev.IKEA.DAL.Persistance.UnitOfWork;
 using LinkDev.IKEA.PL.Mapping;
 using Microsoft.EntityFrameworkCore;
+using LinkDev.IKEA.BLL.Common.Services.Attachments;
+
 
 namespace LinkDev.IKEA.PL
 {
@@ -30,7 +33,10 @@ namespace LinkDev.IKEA.PL
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 			builder.Services.AddScoped<IDepratmentService, DepartmentService>();
 
-			builder.Services.AddScoped<IEmployesService, EmployeeService>();
+            builder.Services.AddScoped<IEmployesService, EmployeeService>();
+
+            builder.Services.AddTransient<IAttachmentService, AttachmentService>();
+
             builder.Services.AddAutoMapper(m=> m.AddProfile(new MappingProfile()));
 
             var app = builder.Build();

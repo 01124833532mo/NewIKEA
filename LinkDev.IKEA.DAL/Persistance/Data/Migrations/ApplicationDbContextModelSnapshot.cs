@@ -111,6 +111,9 @@ namespace LinkDev.IKEA.DAL.Persistance.Data.Migrations
                     b.Property<DateOnly>("HiringDate")
                         .HasColumnType("date");
 
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 

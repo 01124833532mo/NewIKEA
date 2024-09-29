@@ -21,15 +21,15 @@ namespace LinkDev.IKEA.DAL.Persistance.UnitOfWork
 			_dbContext = dbContext;
         }
 
-        public int Complete()
-		{
-			return _dbContext.SaveChanges();
+        public async Task<int> CompleteAsynce()
+        {
+            return await _dbContext.SaveChangesAsync();
 
-		}
+        }
 
-		public void Dispose()
-		{
-			_dbContext.Dispose();
-		}
-	}
+        public async ValueTask DisposeAsync()
+        {
+            await _dbContext.DisposeAsync();
+        }
+    }
 }

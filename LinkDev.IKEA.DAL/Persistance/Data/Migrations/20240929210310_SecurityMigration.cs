@@ -11,6 +11,18 @@ namespace LinkDev.IKEA.DAL.Persistance.Data.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AddColumn<int>(
+                name: "DepartmentId",
+                table: "Employees",
+                type: "int",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "Image",
+                table: "Employees",
+                type: "nvarchar(max)",
+                nullable: true);
+
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -157,6 +169,11 @@ namespace LinkDev.IKEA.DAL.Persistance.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Employees_DepartmentId",
+                table: "Employees",
+                column: "DepartmentId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
                 column: "RoleId");
@@ -194,11 +211,23 @@ namespace LinkDev.IKEA.DAL.Persistance.Data.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Employees_Departments_DepartmentId",
+                table: "Employees",
+                column: "DepartmentId",
+                principalTable: "Departments",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.SetNull);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Employees_Departments_DepartmentId",
+                table: "Employees");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -219,6 +248,18 @@ namespace LinkDev.IKEA.DAL.Persistance.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropIndex(
+                name: "IX_Employees_DepartmentId",
+                table: "Employees");
+
+            migrationBuilder.DropColumn(
+                name: "DepartmentId",
+                table: "Employees");
+
+            migrationBuilder.DropColumn(
+                name: "Image",
+                table: "Employees");
         }
     }
 }
