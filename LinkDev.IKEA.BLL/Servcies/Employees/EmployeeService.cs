@@ -1,5 +1,6 @@
 ﻿using Azure;
 using Link.Dev.IKEA.DAL.Data;
+using LinkDev.IKEA.BLL.Common.Services.Attachments;
 using LinkDev.IKEA.BLL.Models.Employees;
 using LinkDev.IKEA.DAL.Common.Enums;
 using LinkDev.IKEA.DAL.Entites.Employees;
@@ -17,10 +18,12 @@ namespace LinkDev.IKEA.BLL.Servcies.Employees
 	public class EmployeeService : IEmployesService
 	{
 		private readonly IUnitOfWork _unitOfWork;
+		private readonly IAttachmentService _attachmentService;
 
-		public EmployeeService(IUnitOfWork unitOfWork)
+		public EmployeeService(IUnitOfWork unitOfWork , IAttachmentService attachmentService)
         {
 			_unitOfWork = unitOfWork;
+			_attachmentService = attachmentService;
 		}
         public int CreateEmploye(CreatedEmployeeDto employeeDto)
 		{
@@ -41,9 +44,13 @@ namespace LinkDev.IKEA.BLL.Servcies.Employees
 				LastModifiedBy = 1,
 				LastModifiedOn= DateTime.UtcNow,
 				DepartmentId= employeeDto.DepartmentId,
-				
 
 			};
+
+			if(employeeDto.Image is not null)
+			{
+				employee.Image = _attachmentService.Upload(employeeDto.Image, "images");
+			}
 
 			 _unitOfWork.EmployeeRepository.Add(employee);
 		return	_unitOfWork.Complete();

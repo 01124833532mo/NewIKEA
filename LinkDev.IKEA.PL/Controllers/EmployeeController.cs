@@ -67,7 +67,7 @@ namespace LinkDev.IKEA.PL.Controllers
 				IsActive = emploeeView.IsActive,
 					PhoneNumber = emploeeView.PhoneNumber,
 					Salary= emploeeView.Salary,
-
+					Image= emploeeView.Image,
 			};
 
 

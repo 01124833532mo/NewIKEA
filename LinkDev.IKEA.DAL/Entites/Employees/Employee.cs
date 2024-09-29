@@ -42,5 +42,7 @@ namespace LinkDev.IKEA.DAL.Entites.Employees
 
         public int? DepartmentId { get; set; }
         public virtual Department? Department { get; set; }
+
+		public string? Image { get; set; }
     }
 }
