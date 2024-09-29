@@ -6,7 +6,7 @@
 @{
     ViewData["Title"] = "Create";
     ViewBag.Action = "Create";
-    var Departments = new SelectList(_departmentsevice.GetAllDepartments(), nameof(DepartmentToReturnDto.Id), nameof(DepartmentToReturnDto.Name ));
+    var Departments = new SelectList(await _departmentsevice.GetAllDepartmentsAsynce(), nameof(DepartmentToReturnDto.Id), nameof(DepartmentToReturnDto.Name ));
 }
 
 

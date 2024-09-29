@@ -25,7 +25,7 @@ namespace LinkDev.IKEA.BLL.Servcies.Employees
 			_unitOfWork = unitOfWork;
 			_attachmentService = attachmentService;
 		}
-        public int CreateEmploye(CreatedEmployeeDto employeeDto)
+        public async Task< int> CreateEmployeAsynce(CreatedEmployeeDto employeeDto)
 		{
 
 			var employee = new Employee()
@@ -49,31 +49,31 @@ namespace LinkDev.IKEA.BLL.Servcies.Employees
 
 			if(employeeDto.Image is not null)
 			{
-				employee.Image = _attachmentService.Upload(employeeDto.Image, "images");
+				employee.Image = await _attachmentService.UploadAsynce(employeeDto.Image, "images");
 			}
 
 			 _unitOfWork.EmployeeRepository.Add(employee);
-		return	_unitOfWork.Complete();
+		return await	_unitOfWork.CompleteAsynce();
 		}
 
-		public bool DeleteEmploye(int id)
+		public async Task< bool> DeleteEmployeAsynce(int id)
 		{
 			var employeeUnit = _unitOfWork.EmployeeRepository;
 
-			var employee = employeeUnit.GetById(id);
+			var employee = await employeeUnit.GetByIdAsynce(id);
 if(employee is { })
 			{
 				 employeeUnit.Delete(employee) ;
-				return _unitOfWork.Complete()>0;
+				return await _unitOfWork.CompleteAsynce()>0;
 			}
 
 return false;
 		}
 
-		public IEnumerable<EmployeeToReturnDto> GetEmployes(string search)
+		public async Task< IEnumerable<EmployeeToReturnDto>> GetEmployesAsynce(string search)
 		{
 
-			return _unitOfWork.EmployeeRepository
+			return await _unitOfWork.EmployeeRepository
 				.GetAllAsIQueryable()
 				.Where(e=>!e.IsDeleted && (string.IsNullOrEmpty(search) || e.Name.ToLower().Contains(search.ToLower())))
 				.Include(e => e.Department)
@@ -91,16 +91,16 @@ return false;
 				EmployeeType = emploee.EmployeeType.ToString() ,
 				Department=emploee.Department.Name,
 				Image=emploee.Image,
-			}).ToList();
+			}).ToListAsync();
 			//var employee = result.ToList();
 			//var emploee2 = result.FirstOrDefault();
 			//return employee;
 			//return emploee2;
 		}
 
-		public EmployeeDetailsToReturnDto? GetEmployesById(int id)
+		public async Task <EmployeeDetailsToReturnDto?> GetEmployesByIdAsynce(int id)
 		{
-		var emploee = _unitOfWork.EmployeeRepository.GetById(id); 
+		var emploee = await _unitOfWork.EmployeeRepository.GetByIdAsynce(id); 
 			if(emploee is { })
 			{
 				return new EmployeeDetailsToReturnDto(){
@@ -127,7 +127,7 @@ return false;
 			}
 		}
 
-		public int UpdateEmploye(UpdatedEmployeeDto employeeDto)
+		public async Task <int> UpdateEmployeAsynce(UpdatedEmployeeDto employeeDto)
 		{
 			var employee = new Employee()
 			{
@@ -150,7 +150,7 @@ return false;
 			};
 			 _unitOfWork.EmployeeRepository.Update(employee);
 
-			return _unitOfWork.Complete();
+			return await _unitOfWork.CompleteAsynce();
 		}
 	}
 }

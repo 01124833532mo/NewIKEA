@@ -2,7 +2,7 @@
 @inject IDepratmentService _departmentsevice
 
 @{
-    var Departments = new SelectList(_departmentsevice.GetAllDepartments(), nameof(DepartmentToReturnDto.Id), nameof(DepartmentToReturnDto.Name));
+    var Departments = new SelectList(await _departmentsevice.GetAllDepartmentsAsynce(), nameof(DepartmentToReturnDto.Id), nameof(DepartmentToReturnDto.Name));
 
 }
 <form asp-action="@ViewBag.Action" method="post" class="col-6" enctype="multipart/form-data">
