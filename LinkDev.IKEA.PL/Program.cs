@@ -8,6 +8,8 @@ using LinkDev.IKEA.DAL.Persistance.UnitOfWork;
 using LinkDev.IKEA.PL.Mapping;
 using Microsoft.EntityFrameworkCore;
 using LinkDev.IKEA.BLL.Common.Services.Attachments;
+using Microsoft.AspNetCore.Identity;
+using LinkDev.IKEA.DAL.Entites.Identity;
 
 
 namespace LinkDev.IKEA.PL
@@ -39,7 +41,28 @@ namespace LinkDev.IKEA.PL
 
             builder.Services.AddAutoMapper(m=> m.AddProfile(new MappingProfile()));
 
-            var app = builder.Build();
+
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>((options) => {
+                options.Password.RequiredLength = 5;
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireUppercase = true;
+
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequiredUniqueChars = 1;
+
+                options.User.RequireUniqueEmail = true;
+
+                options.Lockout.AllowedForNewUsers = true;
+
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                 
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromDays(5);
+
+            }).AddEntityFrameworkStores<ApplicationDbContext>();
+
+
+			var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())

@@ -17,8 +17,7 @@ namespace LinkDev.IKEA.PL.Mapping
 
             #region Departments
 
-            CreateMap<DepartmentDetailsToReturnDto, DepartmentViewModel>()
-                ;
+            CreateMap<DepartmentDetailsToReturnDto, DepartmentViewModel>()  ;
 
             CreateMap<DepartmentViewModel, UpdatedDepartmentDto>();
 
