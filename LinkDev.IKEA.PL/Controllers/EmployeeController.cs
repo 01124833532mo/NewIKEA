@@ -49,10 +49,11 @@ namespace LinkDev.IKEA.PL.Controllers
 			//ViewData["Departments"] = depratmentService.GetAllDepartments();
 			return View();
 		}
-		
-		//[ValidateAntiForgeryToken]
+
+		[ValidateAntiForgeryToken]
+
 		[HttpPost]
-        public async Task<IActionResult> Create(EmploeeViewModel emploeeView)
+		public async Task<IActionResult> Create(EmploeeViewModel emploeeView)
         {
             var Employee = new CreatedEmployeeDto()
 			{
@@ -183,6 +184,7 @@ Age=emploeeView.Age,
 				Name=emploeeView.Name,
 					Id	=id,
 				Salary=emploeeView.Salary,
+				Image=emploeeView.Image
 			};
 
 			if (!ModelState.IsValid)

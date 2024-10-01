@@ -3,6 +3,8 @@
 
 @{
     var Departments = new SelectList(await _departmentsevice.GetAllDepartmentsAsynce(), nameof(DepartmentToReturnDto.Id), nameof(DepartmentToReturnDto.Name));
+
+
 }
 
 <form asp-action="@ViewBag.Action" method="post" class="col-6" enctype="multipart/form-data">
@@ -102,11 +104,15 @@
         </div>
     </div>
 
-    <div class="col-sm-6">
+     <div class="col-sm-6">
         <label class="form-label" asp-for="Image"></label>
         <input asp-for="Image" class="form-control mb-3" />
-@*         <span asp-validation-for="Image" class="text-danger"></span>
- *@    </div>
+        <span asp-validation-for="Image" class="text-danger"></span>
+  </div>  
+
+
+   
+
     <!-- Submit and Back Buttons -->
     @if(ViewBag.Action == "Create")
     {

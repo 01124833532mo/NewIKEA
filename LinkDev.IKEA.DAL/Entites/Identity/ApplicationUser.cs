@@ -15,6 +15,5 @@ namespace LinkDev.IKEA.DAL.Entites.Identity
 
         public bool IAgree { get; set; }
 
-
     }
 }

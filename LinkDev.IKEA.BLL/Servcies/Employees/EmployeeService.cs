@@ -151,10 +151,13 @@ namespace LinkDev.IKEA.BLL.Servcies.Employees
 				LastModifiedBy = 1,
 				LastModifiedOn = DateTime.UtcNow,
 				DepartmentId= employeeDto.DepartmentId,
-				Image= employeeDto.Image,
 
 			};
-			 _unitOfWork.EmployeeRepository.Update(employee);
+			if (employeeDto.Image is not null)
+			{
+				employee.Image = await _attachmentService.UploadAsynce(employeeDto.Image, "images");
+			}
+			_unitOfWork.EmployeeRepository.Update(employee);
 
             return await _unitOfWork.CompleteAsynce();
         }

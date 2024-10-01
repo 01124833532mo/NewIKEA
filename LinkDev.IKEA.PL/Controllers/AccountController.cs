@@ -47,6 +47,7 @@ namespace LinkDev.IKEA.PL.Controllers
 					FName = model.FirstName,
 					LName = model.LastName,
 					IAgree = model.IsAgree,
+
 				};
 
 
@@ -67,10 +68,42 @@ namespace LinkDev.IKEA.PL.Controllers
 			return View(model);
 			
 		}
-
+		[HttpGet]
 		public IActionResult SignIn()
 		{
 			return View();
+		}
+
+		[HttpPost]
+		public async Task <IActionResult> SignIn(SignInViewModel model)
+		{
+			if (!ModelState.IsValid)
+				return BadRequest();
+			
+			var user = await _userManager.FindByEmailAsync(model.Email);
+			if(user is { })
+			{
+				var flag = await _userManager.CheckPasswordAsync(user, model.Password);
+
+				if (flag)
+				{
+					var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RemmberMe, true);
+
+					if (result.IsNotAllowed)
+						ModelState.AddModelError(string.Empty, "user account is not allowed");
+					if (result.IsLockedOut)
+						ModelState.AddModelError(string.Empty, "user account is locked out");
+
+					if (result.Succeeded)
+					{
+						return RedirectToAction(nameof(HomeController.Index), "Home");
+					}
+
+				}
+			}
+			ModelState.AddModelError(string.Empty, "invalid token attemped");
+			return View(model);
+
 		}
 	}
 }
