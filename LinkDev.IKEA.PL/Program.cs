@@ -69,7 +69,8 @@ namespace LinkDev.IKEA.PL
                 options.AccessDeniedPath = "/Home/Error";
             options.ExpireTimeSpan = TimeSpan.FromDays(1);
 
-                options.LogoutPath = "/Account/SignIn";
+                //options.LogoutPath = "/Account/SignIn";
+                //options.ForwardSignOut = "/Account/SignIn";
 
 			});
 

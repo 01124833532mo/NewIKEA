@@ -101,9 +101,18 @@ namespace LinkDev.IKEA.PL.Controllers
 
 				}
 			}
-			ModelState.AddModelError(string.Empty, "invalid token attemped");
+			ModelState.AddModelError(string.Empty, "invalid login attemped");
 			return View(model);
 
 		}
+
+
+		public async new Task <IActionResult> SignOut()
+		{
+		await _signInManager.SignOutAsync();
+
+		return	RedirectToAction(nameof(SignIn));
+		}
+
 	}
 }
