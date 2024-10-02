@@ -20,8 +20,10 @@ namespace Link.Dev.IKEA.BLL.Services.Departments
         {
 			_unitOfWork = unitOfWork;
         }
+
         public async Task< IEnumerable<DepartmentToReturnDto>> GetAllDepartmentsAsynce()
          {
+
             //var Departments = _departmentRepository.GetAll();
             //foreach (var department in Departments)
             //{
@@ -35,7 +37,7 @@ namespace Link.Dev.IKEA.BLL.Services.Departments
             //    };
             //}
 
-        
+
             //yield return (DepartmentToReturnDto)Departments;
 
             //yield return new DepartmentToReturnDto
@@ -58,7 +60,9 @@ namespace Link.Dev.IKEA.BLL.Services.Departments
                 Description = D.Description,
                 CreationDate = D.CreationDate,
             }).AsNoTracking().ToListAsync();
+
             return  Departments2;
+
         }
         //public IEnumerable<DepartmentToReturnDto> GetAllDepartmentsIQueryable()
         //{
@@ -72,7 +76,9 @@ namespace Link.Dev.IKEA.BLL.Services.Departments
         //    }).AsNoTracking().ToList();
         //    return Departments;
         //}
+
         public async Task< DepartmentDetailsToReturnDto?> GetDepartmentsByIdAsynce(int id)
+
         {
             var department = await _unitOfWork.DepartmentRepository.GetByIdAsynce(id);
             if (department is not null)
@@ -90,7 +96,9 @@ namespace Link.Dev.IKEA.BLL.Services.Departments
                 };
             return null;
         }
+
         public async Task< int> CreateDepartmentAsynce(CreatedDepartmentDto DepartmentDto)
+
         {
             var department = new Department
             {
@@ -105,7 +113,9 @@ namespace Link.Dev.IKEA.BLL.Services.Departments
              _unitOfWork.DepartmentRepository.Add(department);
             return await _unitOfWork.CompleteAsynce();
         }
+
         public async Task< int> UpdateDepartmentAsynce(UpdatedDepartmentDto DepartmentDto)
+
         {
             var department = new Department
             {
@@ -125,7 +135,9 @@ namespace Link.Dev.IKEA.BLL.Services.Departments
 
             return await _unitOfWork.CompleteAsynce();
         }
+
         public async Task< bool> DeleteDepartmentAsynce(int id)
+
         {
             var DepartmentUnit = _unitOfWork.DepartmentRepository;
 

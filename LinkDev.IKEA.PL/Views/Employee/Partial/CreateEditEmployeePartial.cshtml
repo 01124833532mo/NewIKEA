@@ -4,7 +4,9 @@
 @{
     var Departments = new SelectList(await _departmentsevice.GetAllDepartmentsAsynce(), nameof(DepartmentToReturnDto.Id), nameof(DepartmentToReturnDto.Name));
 
+
 }
+
 <form asp-action="@ViewBag.Action" method="post" class="col-6" enctype="multipart/form-data">
     <div asp-validation-summary="ModelOnly"></div>
 
@@ -55,7 +57,7 @@
 
     <div class="col-sm-6 mb-3">
         <label class="form-label" asp-for="DepartmentId"></label>
-        <select asp-for="DepartmentId" asp-items="@Departments" class="form-control">
+        <select asp-for="DepartmentId" aria-label="Disabled select example" asp-items="@Departments" class="form-control">
             <option value="@null">Choose..</option>
 
         </select>
@@ -102,11 +104,13 @@
         </div>
     </div>
 
+
     <div class="col-sm-6">
         <label class="form-label" asp-for="Image"></label>
         <input asp-for="Image" class="form-control mb-3" />
 @*         <span asp-validation-for="Image" class="text-danger"></span>
  *@    </div>
+
 
     <!-- Submit and Back Buttons -->
     @if(ViewBag.Action == "Create")
@@ -126,6 +130,4 @@
     }
 
 </form>
-
-
 

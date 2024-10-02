@@ -23,7 +23,9 @@ namespace LinkDev.IKEA.PL.Controllers
 		}
         [HttpGet]
 
+
         public async Task <IActionResult> Index()
+
         {
             //ViewData["Message"] = "hello view date";
             //ViewBag["Message"] = "heloo view bag";
@@ -42,7 +44,9 @@ namespace LinkDev.IKEA.PL.Controllers
         [HttpPost]
         //[ValidateAntiForgeryToken]
 
+
         public async Task <IActionResult> Create(DepartmentViewModel department)
+
         {
             if (!ModelState.IsValid)
                 return View(department);
@@ -50,10 +54,12 @@ namespace LinkDev.IKEA.PL.Controllers
             try
             {
                 var createdDepartment =_mapper.Map<DepartmentViewModel,CreatedDepartmentDto>(department) ;
+
                 var created = await _depratmentService.CreateDepartmentAsynce(createdDepartment) >0 ;
+
                 if (created)
                 {
-                    TempData["Message2"] = "Department is created";
+                    TempData["Message"] = "Department is created";
                     return RedirectToAction(nameof(Index));
 
                 }
@@ -87,6 +93,7 @@ namespace LinkDev.IKEA.PL.Controllers
 
         }
 
+
         public async Task <IActionResult> Details(int? id)
 		{
 			if (id == null)
@@ -95,6 +102,7 @@ namespace LinkDev.IKEA.PL.Controllers
 			}
 			var department = await _depratmentService.GetDepartmentsByIdAsynce(id.Value);
 			if (department == null)
+
 			{
 				return NotFound();
 			}
@@ -102,7 +110,9 @@ namespace LinkDev.IKEA.PL.Controllers
 		}
 
         [HttpGet]
+
         public async Task <IActionResult> Edit(int? id)
+
         {
 
             if (id is null)
@@ -124,7 +134,9 @@ namespace LinkDev.IKEA.PL.Controllers
         [ValidateAntiForgeryToken]
 
         [HttpPost]
+
         public async Task <IActionResult> Edit([FromRoute] int id, DepartmentViewModel departmentVm)
+
         {
             if (!ModelState.IsValid)
             {
@@ -162,7 +174,9 @@ namespace LinkDev.IKEA.PL.Controllers
         }
 
         [HttpGet]
+
         public async Task <IActionResult> Delete(int? id)
+
         {
             if (id == null)
             {
@@ -180,7 +194,9 @@ namespace LinkDev.IKEA.PL.Controllers
 
         [HttpPost]
 
+
         public async Task <IActionResult> Delete(int id)
+
         {
             var message = string.Empty;
 
@@ -189,7 +205,9 @@ namespace LinkDev.IKEA.PL.Controllers
 
 			try
 			{
+
                 var deleted =await _depratmentService.DeleteDepartmentAsynce(id);
+
                 if (deleted)
                 {
                     TempData["Message"]="The Department is Deleted";

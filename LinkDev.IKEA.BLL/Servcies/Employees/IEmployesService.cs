@@ -10,6 +10,7 @@ namespace LinkDev.IKEA.BLL.Servcies.Employees
 {
 	public interface IEmployesService
 	{
+
 		Task< IEnumerable<EmployeeToReturnDto>> GetEmployesAsynce(string search);
 
 	 Task <EmployeeDetailsToReturnDto?> GetEmployesByIdAsynce(int id);

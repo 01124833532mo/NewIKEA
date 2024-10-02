@@ -17,6 +17,9 @@ namespace LinkDev.IKEA.DAL.Persistance.Repositories._Generic
 		{
 			_dbContext = dbContext;
 		}
+
+       
+
 		public async Task <IEnumerable<T>> GetAllAsynce(bool AsNoTraking = true)
 		{
 			if (AsNoTraking)
@@ -34,6 +37,7 @@ namespace LinkDev.IKEA.DAL.Persistance.Repositories._Generic
 			return await  _dbContext.Set<T>().FindAsync(id);
 		}
 		public IQueryable<T> GetAllAsIQueryable()
+
 		{
 			return _dbContext.Set<T>();
 		}

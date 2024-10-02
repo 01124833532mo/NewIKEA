@@ -9,6 +9,7 @@ namespace Link.Dev.IKEA.BLL.Services.Departments
 {
     public interface IDepratmentService
     {
+
         Task <IEnumerable<DepartmentToReturnDto>> GetAllDepartmentsAsynce();
 
        Task <DepartmentDetailsToReturnDto?> GetDepartmentsByIdAsynce(int id);
@@ -18,5 +19,6 @@ namespace Link.Dev.IKEA.BLL.Services.Departments
         Task <int> UpdateDepartmentAsynce(UpdatedDepartmentDto DepartmentDto);
 
        Task <bool> DeleteDepartmentAsynce(int id);
+
     }
 }

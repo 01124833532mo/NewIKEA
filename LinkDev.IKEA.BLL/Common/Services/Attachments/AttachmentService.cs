@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace LinkDev.IKEA.BLL.Common.Services.Attachments
 {
+  
 	public class AttachmentService : IAttachmentService
 	{
 		private readonly List<string> _allowedExtentions = new() { ".png", ".jpg", ".jpeg" };
@@ -35,9 +36,10 @@ namespace LinkDev.IKEA.BLL.Common.Services.Attachments
 
 			using var fileStream = new FileStream(filePath, FileMode.Create);
 
+
 		await	file.CopyToAsync(fileStream);
 
-			return fileName;
+            return fileName;
 		}
 
 
