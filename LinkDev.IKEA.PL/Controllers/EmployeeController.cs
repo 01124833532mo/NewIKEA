@@ -69,6 +69,7 @@ namespace LinkDev.IKEA.PL.Controllers
 					PhoneNumber = emploeeView.PhoneNumber,
 					Salary= emploeeView.Salary,
 					Image=emploeeView.Image,
+				
 
 			};
 
@@ -159,7 +160,8 @@ namespace LinkDev.IKEA.PL.Controllers
 				PhoneNumber=employee.PhoneNumber,
 				EmployeeType=employee.EmployeeType,
 				Gender	=employee.Gender,
-
+				DepartmentId=employee.DepartmentId,
+				
 
 
 			});

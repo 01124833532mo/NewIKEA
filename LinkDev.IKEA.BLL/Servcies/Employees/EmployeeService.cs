@@ -123,6 +123,7 @@ namespace LinkDev.IKEA.BLL.Servcies.Employees
 				EmployeeType =emploee.EmployeeType,
 					Department=emploee.Department?.Name,
 					Image=	emploee.Image,
+					DepartmentId=emploee.Department?.Id,
 					
 				};
 			}
@@ -151,6 +152,7 @@ namespace LinkDev.IKEA.BLL.Servcies.Employees
 				LastModifiedBy = 1,
 				LastModifiedOn = DateTime.UtcNow,
 				DepartmentId= employeeDto.DepartmentId,
+				
 
 			};
 			if (employeeDto.Image is not null)
