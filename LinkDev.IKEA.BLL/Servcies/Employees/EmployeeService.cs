@@ -20,6 +20,7 @@ namespace LinkDev.IKEA.BLL.Servcies.Employees
 	public class EmployeeService : IEmployesService
 	{
 		private readonly IUnitOfWork _unitOfWork;
+    
         private readonly IAttachmentService _attachmentService;
 
 
@@ -31,6 +32,9 @@ namespace LinkDev.IKEA.BLL.Servcies.Employees
         }
         public async Task<int> CreateEmployeAsynce(CreatedEmployeeDto employeeDto)
         {
+
+		
+       
 
             var employee = new Employee()
 			{
@@ -51,6 +55,7 @@ namespace LinkDev.IKEA.BLL.Servcies.Employees
 
 			};
 
+
             if (employeeDto.Image is not null)
             {
                 employee.Image = await _attachmentService.UploadAsynce(employeeDto.Image, "images");
@@ -70,15 +75,18 @@ namespace LinkDev.IKEA.BLL.Servcies.Employees
 				 employeeUnit.Delete(employee) ;
                 return await _unitOfWork.CompleteAsynce() > 0;
             }
+		
 
             return false;
 		}
 
-        public async Task<IEnumerable<EmployeeToReturnDto>> GetEmployesAsynce(string search)
-        {
 
-            return await _unitOfWork.EmployeeRepository
-                .GetAllAsIQueryable()
+		public async Task< IEnumerable<EmployeeToReturnDto>> GetEmployesAsynce(string search)
+		{
+
+			return await _unitOfWork.EmployeeRepository
+				.GetAllAsIQueryable()
+
 				.Where(e=>!e.IsDeleted && (string.IsNullOrEmpty(search) || e.Name.ToLower().Contains(search.ToLower())))
 				.Include(e => e.Department)
 				.Select(emploee => new EmployeeToReturnDto
@@ -94,7 +102,11 @@ namespace LinkDev.IKEA.BLL.Servcies.Employees
 				Gender = emploee.Gender.ToString(),
 				EmployeeType = emploee.EmployeeType.ToString() ,
 				Department=emploee.Department.Name,
-				Image=	emploee.Image,
+
+			
+
+
+				Image=emploee.Image,
 
 			}).ToListAsync();
 			//var employee = result.ToList();
@@ -103,11 +115,14 @@ namespace LinkDev.IKEA.BLL.Servcies.Employees
 			//return emploee2;
 		}
 
-        public async Task<EmployeeDetailsToReturnDto?> GetEmployesByIdAsynce(int id)
-        {
-            var emploee = await _unitOfWork.EmployeeRepository.GetByIdAsynce(id);
 
-            if (emploee is { })
+      
+
+		public async Task <EmployeeDetailsToReturnDto?> GetEmployesByIdAsynce(int id)
+		{
+		var emploee = await _unitOfWork.EmployeeRepository.GetByIdAsynce(id); 
+			if(emploee is { })
+
 			{
 				return new EmployeeDetailsToReturnDto(){
 					Id=emploee.Id,
@@ -122,10 +137,17 @@ namespace LinkDev.IKEA.BLL.Servcies.Employees
 				Gender = emploee.Gender,
 				EmployeeType =emploee.EmployeeType,
 					Department=emploee.Department?.Name,
+
 					Image=	emploee.Image,
 					DepartmentId=emploee.Department?.Id,
 					
 				};
+
+
+                               
+
+            
+
 			}
 			else
 			{
@@ -133,9 +155,11 @@ namespace LinkDev.IKEA.BLL.Servcies.Employees
 			}
 		}
 
-        public async Task<int> UpdateEmployeAsynce(UpdatedEmployeeDto employeeDto)
-        {
-            var employee = new Employee()
+
+
+		public async Task <int> UpdateEmployeAsynce(UpdatedEmployeeDto employeeDto)
+		{
+			var employee = new Employee()
 			{
 				Id= employeeDto.Id,
 				Name = employeeDto.Name,
@@ -161,7 +185,10 @@ namespace LinkDev.IKEA.BLL.Servcies.Employees
 			}
 			_unitOfWork.EmployeeRepository.Update(employee);
 
-            return await _unitOfWork.CompleteAsynce();
-        }
-    }
+
+
+			return await _unitOfWork.CompleteAsynce();
+		}
+	}
+
 }

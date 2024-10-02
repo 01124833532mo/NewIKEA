@@ -24,18 +24,22 @@ namespace LinkDev.IKEA.PL.Controllers
 
 		[HttpGet]
 
-        public async Task<IActionResult> Index(string search)
-        {
-            var employees = await _employesService.GetEmployesAsynce(search);
+
+		public async Task <IActionResult> Index(string search)
+		{
+			var employees = await _employesService.GetEmployesAsynce( search);
+
 
 
             return View(employees);
 		}
 
 		[HttpGet]
-        public async Task<IActionResult> Search(string search)
-        {
-            var employees = await _employesService.GetEmployesAsynce(search);
+
+		public async Task <IActionResult> Search (string search)
+		{
+			var employees = await _employesService.GetEmployesAsynce(search);
+
 
 
             return PartialView("Partial/EmployeesSearchByAjax", employees);
@@ -53,9 +57,11 @@ namespace LinkDev.IKEA.PL.Controllers
 		[ValidateAntiForgeryToken]
 
 		[HttpPost]
-		public async Task<IActionResult> Create(EmploeeViewModel emploeeView)
-        {
-            var Employee = new CreatedEmployeeDto()
+
+		public async Task <IActionResult> Create(EmploeeViewModel emploeeView)
+		{
+			var Employee = new CreatedEmployeeDto()
+
 			{
 				Name= emploeeView.Name,
 				Gender= emploeeView.Gender,
@@ -68,8 +74,8 @@ namespace LinkDev.IKEA.PL.Controllers
 				IsActive = emploeeView.IsActive,
 					PhoneNumber = emploeeView.PhoneNumber,
 					Salary= emploeeView.Salary,
-					Image=emploeeView.Image,
-				
+
+					Image= emploeeView.Image,
 
 			};
 
@@ -79,8 +85,10 @@ namespace LinkDev.IKEA.PL.Controllers
 			var message = string.Empty;
 			try
 			{
-                var result = await _employesService.CreateEmployeAsynce(Employee);
-                if (result > 0)
+
+				var result = await _employesService.CreateEmployeAsynce(Employee);
+				if (result > 0)
+
 				{
 					TempData["Message"] = "Employee Is Created";
 
@@ -111,14 +119,16 @@ namespace LinkDev.IKEA.PL.Controllers
 			}
 		}
 		[HttpGet]
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
+
+		public async Task <IActionResult> Details(int? id)
+		{
+			if (id == null)
 			{
 				return BadRequest();
 			}
-            var employee = await _employesService.GetEmployesByIdAsynce(id.Value);
-            if (employee == null)
+			var employee = await _employesService.GetEmployesByIdAsynce(id.Value);
+			if (employee == null)
+
 			{
 				return NotFound();
 			}
@@ -126,15 +136,19 @@ namespace LinkDev.IKEA.PL.Controllers
 		}
 
         [HttpGet]
-        public async Task<IActionResult> Edit(int? id, [FromServices] IDepratmentService depratmentService)
-        {
+
+		public async Task <IActionResult> Edit(int? id,[FromServices] IDepratmentService depratmentService)
+		{
+
 
             if (id is null)
 			{
 				return BadRequest();
 			}
 
-            var employee = await _employesService.GetEmployesByIdAsynce(id.Value);
+
+			var employee = await _employesService.GetEmployesByIdAsynce(id.Value);
+
 
             // Check if department exists
             if (employee == null)
@@ -169,8 +183,10 @@ namespace LinkDev.IKEA.PL.Controllers
         [ValidateAntiForgeryToken]
 
         [HttpPost]
-        public async Task<IActionResult> Edit([FromRoute] int id, EmploeeViewModel emploeeView)
-        {
+
+		public async Task <IActionResult> Edit([FromRoute] int id, EmploeeViewModel emploeeView)
+		{
+
 
             var employee = new UpdatedEmployeeDto()
 			{
@@ -196,7 +212,9 @@ Age=emploeeView.Age,
 			var message = string.Empty;
 			try
 			{
-                var updated = await _employesService.UpdateEmployeAsynce(employee) > 0;
+
+				var updated = await _employesService.UpdateEmployeAsynce(employee) > 0;
+
 
                 if (updated)
 				{
@@ -243,14 +261,16 @@ Age=emploeeView.Age,
 
         [HttpPost]
 
-        public async Task<IActionResult> Delete(int id)
-        {
-            var message = string.Empty;
+
+		public async Task <IActionResult> Delete(int id)
+		{
+			var message = string.Empty;
 
 			try
 			{
-                var employee = await _employesService.DeleteEmployeAsynce(id);
-                if (employee)
+				var employee = await _employesService.DeleteEmployeAsynce(id);
+				if (employee)
+
 				{
 					TempData["Message"] = "Employee Is Deleted";
 					return RedirectToAction(nameof(Index));

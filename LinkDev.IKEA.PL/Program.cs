@@ -35,7 +35,8 @@ namespace LinkDev.IKEA.PL
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 			builder.Services.AddScoped<IDepratmentService, DepartmentService>();
 
-            builder.Services.AddScoped<IEmployesService, EmployeeService>();
+
+			builder.Services.AddScoped<IEmployesService, EmployeeService>();
 
             builder.Services.AddTransient<IAttachmentService, AttachmentService>();
 

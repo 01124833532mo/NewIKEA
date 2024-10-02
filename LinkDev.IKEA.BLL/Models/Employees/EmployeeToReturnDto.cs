@@ -35,7 +35,9 @@ namespace LinkDev.IKEA.BLL.Models.Employees
 		[Display(Name = "Department")]
 		public string? Department { get; set; }
 
-        public string? Image { get; set; }
 
-    }
+		public string? Image { get; set; }
+
+	}
+
 }

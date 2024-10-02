@@ -9,13 +9,19 @@ using System.Threading.Tasks;
 namespace LinkDev.IKEA.DAL.Persistance.UnitOfWork
 {
 	public interface IUnitOfWork : IAsyncDisposable
-    {
+
+
+	{
+
         public IEmployeeRepository EmployeeRepository { get;  }
 
         public IDepartmentRepository    DepartmentRepository { get;  }
 
 
-        Task<int> CompleteAsynce();
+
+
+       Task <int> CompleteAsynce();
+
 
     }
 }

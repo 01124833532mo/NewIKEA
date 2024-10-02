@@ -7,13 +7,14 @@ using System.Threading.Tasks;
 
 namespace LinkDev.IKEA.BLL.Common.Services.Attachments
 {
-    public class AttachmentService : IAttachmentService
+  
+	public class AttachmentService : IAttachmentService
 	{
 		private readonly List<string> _allowedExtentions = new() { ".png", ".jpg", ".jpeg" };
-		private const int _allowedMaxSize = 2_097_152;
-        public async Task<string?> UploadAsynce(IFormFile file, string folderName)
-        {
-            var extention = Path.GetExtension(file.FileName);
+		private const int _allowedMaxSize = 2_097_152; 
+		public async Task <string?> UploadAsynce(IFormFile file, string folderName)
+		{
+			var extention = Path.GetExtension(file.FileName);
 
 			if (!_allowedExtentions.Contains(extention))
 				return null;
@@ -35,7 +36,8 @@ namespace LinkDev.IKEA.BLL.Common.Services.Attachments
 
 			using var fileStream = new FileStream(filePath, FileMode.Create);
 
-            await file.CopyToAsync(fileStream);
+
+		await	file.CopyToAsync(fileStream);
 
             return fileName;
 		}
