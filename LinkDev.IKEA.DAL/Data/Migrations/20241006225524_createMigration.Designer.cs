@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace LinkDev.IKEA.DAL.Persistance.Data.Migrations
+namespace LinkDev.IKEA.DAL.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240929233153_ChangeUserEntityMigration")]
-    partial class ChangeUserEntityMigration
+    [Migration("20241006225524_createMigration")]
+    partial class createMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

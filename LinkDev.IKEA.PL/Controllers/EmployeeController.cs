@@ -175,7 +175,7 @@ namespace LinkDev.IKEA.PL.Controllers
 				EmployeeType=employee.EmployeeType,
 				Gender	=employee.Gender,
 				DepartmentId=employee.DepartmentId,
-				
+				ImagePath=employee.Image,
 
 
 			});
@@ -202,7 +202,8 @@ Age=emploeeView.Age,
 				Name=emploeeView.Name,
 					Id	=id,
 				Salary=emploeeView.Salary,
-				Image=emploeeView.Image
+				Image=emploeeView.Image,
+				ImagePath=emploeeView.ImagePath,
 			};
 
 			if (!ModelState.IsValid)

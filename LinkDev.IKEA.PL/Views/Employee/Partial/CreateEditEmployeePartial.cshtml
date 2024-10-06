@@ -104,6 +104,16 @@
         </div>
     </div>
 
+    @if (ViewBag.Action == "Edit")
+    {
+        <div class="col-sm-6">
+            <label class="form-label" asp-for="ImagePath"></label>
+            <input asp-for="ImagePath" class="form-control mb-3" readonly />
+            @*         <span asp-validation-for="Image" class="text-danger"></span>
+        *@
+        </div>
+
+    }
 
     <div class="col-sm-6">
         <label class="form-label" asp-for="Image"></label>

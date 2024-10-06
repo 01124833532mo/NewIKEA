@@ -4,6 +4,7 @@ using LinkDev.IKEA.DAL.Entites.Departments;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -43,8 +44,7 @@ namespace LinkDev.IKEA.DAL.Entites.Employees
         public int? DepartmentId { get; set; }
         public virtual Department? Department { get; set; }
 
-
-		public string? Image { get; set; }
+        public string? Image { get; set; }
 
     }
 }

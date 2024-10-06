@@ -144,7 +144,7 @@ namespace Link.Dev.IKEA.BLL.Services.Departments
             var department = await DepartmentUnit.GetByIdAsynce(id);
             if (department is not null)
             {
-                var employess = _unitOfWork.EmployeeRepository.GetAllAsIQueryable().Where(e => e.Department == department);
+                var employess = _unitOfWork.EmployeeRepository.GetAllAsIQueryable().Where(e => e.DepartmentId == department.Id).ToList();
 
                 foreach (var employee  in employess)
                 {

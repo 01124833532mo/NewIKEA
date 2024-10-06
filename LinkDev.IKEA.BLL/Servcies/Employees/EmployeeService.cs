@@ -176,6 +176,7 @@ namespace LinkDev.IKEA.BLL.Servcies.Employees
 				LastModifiedBy = 1,
 				LastModifiedOn = DateTime.UtcNow,
 				DepartmentId= employeeDto.DepartmentId,
+		Image=employeeDto.ImagePath
 				
 
 			};
@@ -183,6 +184,7 @@ namespace LinkDev.IKEA.BLL.Servcies.Employees
 			{
 				employee.Image = await _attachmentService.UploadAsynce(employeeDto.Image, "images");
 			}
+		
 			_unitOfWork.EmployeeRepository.Update(employee);
 
 

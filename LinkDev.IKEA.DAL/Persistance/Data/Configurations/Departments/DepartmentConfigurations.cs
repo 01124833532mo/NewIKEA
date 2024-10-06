@@ -25,6 +25,7 @@ namespace LinkDev.IKEA.DAL.Persistance.Data.Configurations.Departments
                 .HasForeignKey(p => p.DepartmentId)
                 .OnDelete(DeleteBehavior.SetNull);
 
+           
         }
     }
 }
