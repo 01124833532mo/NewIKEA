@@ -19,5 +19,9 @@ namespace Link.Dev.IKEA.BLL.Models.Departments
         public string? Description { get; set; }
         [Display(Name = "Date Of Creation")]
         public DateOnly CreationDate { get; set; }
+
+        [Display(Name ="Manger Name")]
+        public int MangerId { get; set; }
+
     }
 }

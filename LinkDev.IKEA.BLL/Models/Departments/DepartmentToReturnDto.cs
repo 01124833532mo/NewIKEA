@@ -16,6 +16,9 @@ namespace Link.Dev.IKEA.BLL.Models.Departments
         [Display(Name = "Date Of Creation")]
         public DateOnly CreationDate { get; set; }
 
+        public string Manger { get; set; } = null!;
+
+
         //public static explicit operator DepartmentToReturnDto(Department department)
         //{
         //    return new DepartmentToReturnDto

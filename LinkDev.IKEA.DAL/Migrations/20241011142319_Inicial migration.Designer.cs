@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace LinkDev.IKEA.DAL.Data.Migrations
+namespace LinkDev.IKEA.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241006225524_createMigration")]
-    partial class createMigration
+    [Migration("20241011142319_Inicial migration")]
+    partial class Inicialmigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -65,11 +65,17 @@ namespace LinkDev.IKEA.DAL.Data.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETDATE()");
 
+                    b.Property<int>("MangerId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("varchar(50)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MangerId")
+                        .IsUnique();
 
                     b.ToTable("Departments");
                 });
@@ -355,6 +361,17 @@ namespace LinkDev.IKEA.DAL.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("LinkDev.IKEA.DAL.Entites.Departments.Department", b =>
+                {
+                    b.HasOne("LinkDev.IKEA.DAL.Entites.Employees.Employee", "Manger")
+                        .WithOne("DepartmentManger")
+                        .HasForeignKey("LinkDev.IKEA.DAL.Entites.Departments.Department", "MangerId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Manger");
+                });
+
             modelBuilder.Entity("LinkDev.IKEA.DAL.Entites.Employees.Employee", b =>
                 {
                     b.HasOne("LinkDev.IKEA.DAL.Entites.Departments.Department", "Department")
@@ -419,6 +436,11 @@ namespace LinkDev.IKEA.DAL.Data.Migrations
             modelBuilder.Entity("LinkDev.IKEA.DAL.Entites.Departments.Department", b =>
                 {
                     b.Navigation("Employess");
+                });
+
+            modelBuilder.Entity("LinkDev.IKEA.DAL.Entites.Employees.Employee", b =>
+                {
+                    b.Navigation("DepartmentManger");
                 });
 #pragma warning restore 612, 618
         }

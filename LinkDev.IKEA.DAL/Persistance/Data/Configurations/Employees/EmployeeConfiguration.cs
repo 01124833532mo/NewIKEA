@@ -1,4 +1,5 @@
 ﻿using LinkDev.IKEA.DAL.Common.Enums;
+using LinkDev.IKEA.DAL.Entites.Departments;
 using LinkDev.IKEA.DAL.Entites.Employees;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -33,6 +34,9 @@ namespace LinkDev.IKEA.DAL.Persistance.Data.Configurations.Employees
 				);
 			builder.Property(d => d.CreatedOn).HasDefaultValueSql("GETUTCDATE()");
 
+
+			builder.HasOne(p => p.DepartmentManger).WithOne(p => p.Manger)
+				.HasForeignKey<Department>(p => p.MangerId).OnDelete(DeleteBehavior.NoAction);
 		}
-	}
+    }
 }
