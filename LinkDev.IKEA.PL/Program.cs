@@ -60,7 +60,7 @@ namespace LinkDev.IKEA.PL
                  
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromDays(5);
 
-            }).AddEntityFrameworkStores<ApplicationDbContext>();
+            }).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 
 
             // configyration on cookeis

@@ -1,4 +1,6 @@
-﻿using LinkDev.IKEA.DAL.Entites.Identity;
+﻿using LinkDev.IKEA.DAL.Entites;
+using LinkDev.IKEA.DAL.Entites.Identity;
+using LinkDev.IKEA.PL.Helpers;
 using LinkDev.IKEA.PL.ViewModels.Identity;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
@@ -112,6 +114,44 @@ namespace LinkDev.IKEA.PL.Controllers
 		await _signInManager.SignOutAsync();
 
 		return	RedirectToAction(nameof(SignIn));
+		}
+
+		public IActionResult ForgetPassword()
+		{
+			return View();
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> ForgetPassword(ForgetPasswordViewModel viewModel)
+		{
+			if (ModelState.IsValid)
+			{
+				var user = await _userManager.FindByEmailAsync(viewModel.Email);
+				if (user is not null)
+				{
+					var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+					var ResetPasswordUrl = Url.Action("ResetPassword", "Account", new { email = viewModel.Email , token=token });
+
+					var email = new Email()
+					{
+						Subject = "Reset Your Password",
+						Reciepints = viewModel.Email,
+						Body = ResetPasswordUrl
+					};
+
+					EmailSettings.SendEmail(email);
+					return RedirectToAction(nameof(ChekYourInbox));
+
+					// ... (rest of the code)
+				}
+				ModelState.AddModelError(string.Empty, "Invalid Email");
+			}
+			return View(viewModel);
+		}
+
+		public IActionResult ChekYourInbox()
+		{
+			return View();
 		}
 
 	}
