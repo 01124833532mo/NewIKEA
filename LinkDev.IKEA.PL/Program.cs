@@ -10,6 +10,8 @@ using Microsoft.EntityFrameworkCore;
 using LinkDev.IKEA.BLL.Common.Services.Attachments;
 using Microsoft.AspNetCore.Identity;
 using LinkDev.IKEA.DAL.Entites.Identity;
+using LinkDev.IKEA.PL.Settings;
+using LinkDev.IKEA.PL.Helpers;
 
 
 namespace LinkDev.IKEA.PL
@@ -21,7 +23,7 @@ namespace LinkDev.IKEA.PL
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
+            
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -91,7 +93,11 @@ namespace LinkDev.IKEA.PL
 				options.LogoutPath = "/Account/SignIn";
 			}) ;
 
-			 var app = builder.Build();
+
+            builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
+			builder.Services.AddTransient<IMailSettings, EmailSettings>();
+
+			var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
