@@ -181,7 +181,7 @@
 					<td>@Html.DisplayFor(x => item.EmployeeType)</td>
 
 					<!-- Details, Update, Delete buttons -->
-					<partial name="_ButtonsPartial" model="@item.Id" />
+					<partial name="_ButtonsPartial" model="@item.Id.ToString()" />
 				</tr>
 
 				<!-- Modal for Delete Confirmation -->

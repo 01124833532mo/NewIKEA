@@ -9,152 +9,152 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LinkDev.IKEA.PL.Controllers
 {
-	public class EmployeeController : Controller
-	{
-		private readonly IEmployesService _employesService;
-		private readonly ILogger _logger;
-		private readonly IWebHostEnvironment _webHostEnvironment;
+    public class EmployeeController : Controller
+    {
+        private readonly IEmployesService _employesService;
+        private readonly ILogger _logger;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
         public EmployeeController(IEmployesService employesService, ILogger<DepartmentController> logger, IWebHostEnvironment webHostEnvironment)
-		{
-			_employesService = employesService;
-			_logger = logger;
-			_webHostEnvironment = webHostEnvironment;
+        {
+            _employesService = employesService;
+            _logger = logger;
+            _webHostEnvironment = webHostEnvironment;
         }
 
-		[HttpGet]
+        [HttpGet]
 
 
-		public async Task <IActionResult> Index(string search)
-		{
-			var employees = await _employesService.GetEmployesAsynce( search);
+        public async Task<IActionResult> Index(string search)
+        {
+            var employees = await _employesService.GetEmployesAsynce(search);
 
 
 
             return View(employees);
-		}
+        }
 
-		[HttpGet]
+        [HttpGet]
 
-		public async Task <IActionResult> Search (string search)
-		{
-			var employees = await _employesService.GetEmployesAsynce(search);
+        public async Task<IActionResult> Search(string search)
+        {
+            var employees = await _employesService.GetEmployesAsynce(search);
 
 
 
             return PartialView("Partial/EmployeesSearchByAjax", employees);
-		}
-
-		[HttpGet]
-
-		// injection Idepartmentservice at view or PartialView
-		public IActionResult Create(/*[FromServices] IDepratmentService depratmentService*/)
-		{
-			//ViewData["Departments"] = depratmentService.GetAllDepartments();
-			return View();
-		}
-
-		[ValidateAntiForgeryToken]
-
-		[HttpPost]
-
-		public async Task <IActionResult> Create(EmploeeViewModel emploeeView)
-		{
-			var Employee = new CreatedEmployeeDto()
-
-			{
-				Name= emploeeView.Name,
-				Gender= emploeeView.Gender,
-				DepartmentId= emploeeView.DepartmentId,
-				Adress	= emploeeView.Adress,
-				Age	= emploeeView.Age,
-				Email	= emploeeView.Email,
-				EmployeeType	= emploeeView.EmployeeType,
-				HiringDate	= emploeeView.HiringDate,
-				IsActive = emploeeView.IsActive,
-					PhoneNumber = emploeeView.PhoneNumber,
-					Salary= emploeeView.Salary,
-
-					Image= emploeeView.Image,
-
-			};
-
-
-			if (!ModelState.IsValid)
-				return View(emploeeView);
-			var message = string.Empty;
-			try
-			{
-
-				var result = await _employesService.CreateEmployeAsynce(Employee);
-				if (result > 0)
-
-				{
-					TempData["Message"] = "Employee Is Created";
-
-					return RedirectToAction(nameof(Index));
-
-				}
-				else
-				{
-
-					message = "Employee is not Created";
-					ModelState.AddModelError(string.Empty, message);
-					return View(result);
-				}
-			}
-			catch (Exception ex)
-			{
-				_logger.LogError(ex, ex.Message);
-				if (_webHostEnvironment.IsDevelopment())
-				{
-					message = ex.Message;
-					return View(emploeeView);
-				}
-				else
-				{
-					message = "Employee is not Created";
-					return View("Error", message);
-				}
-			}
-		}
-		[HttpGet]
-
-		public async Task <IActionResult> Details(int? id)
-		{
-			if (id == null)
-			{
-				return BadRequest();
-			}
-			var employee = await _employesService.GetEmployesByIdAsynce(id.Value);
-			if (employee == null)
-
-			{
-				return NotFound();
-			}
-			return View(employee);
-		}
+        }
 
         [HttpGet]
 
-		public async Task <IActionResult> Edit(int? id,[FromServices] IDepratmentService depratmentService)
-		{
+        // injection Idepartmentservice at view or PartialView
+        public IActionResult Create(/*[FromServices] IDepratmentService depratmentService*/)
+        {
+            //ViewData["Departments"] = depratmentService.GetAllDepartments();
+            return View();
+        }
+
+        [ValidateAntiForgeryToken]
+
+        [HttpPost]
+
+        public async Task<IActionResult> Create(EmploeeViewModel emploeeView)
+        {
+            var Employee = new CreatedEmployeeDto()
+
+            {
+                Name = emploeeView.Name,
+                Gender = emploeeView.Gender,
+                DepartmentId = emploeeView.DepartmentId,
+                Adress = emploeeView.Adress,
+                Age = emploeeView.Age,
+                Email = emploeeView.Email,
+                EmployeeType = emploeeView.EmployeeType,
+                HiringDate = emploeeView.HiringDate,
+                IsActive = emploeeView.IsActive,
+                PhoneNumber = emploeeView.PhoneNumber,
+                Salary = emploeeView.Salary,
+
+                Image = emploeeView.Image,
+
+            };
+
+
+            if (!ModelState.IsValid)
+                return View(emploeeView);
+            var message = string.Empty;
+            try
+            {
+
+                var result = await _employesService.CreateEmployeAsynce(Employee);
+                if (result > 0)
+
+                {
+                    TempData["Message"] = "Employee Is Created";
+
+                    return RedirectToAction(nameof(Index));
+
+                }
+                else
+                {
+
+                    message = "Employee is not Created";
+                    ModelState.AddModelError(string.Empty, message);
+                    return View(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                if (_webHostEnvironment.IsDevelopment())
+                {
+                    message = ex.Message;
+                    return View(emploeeView);
+                }
+                else
+                {
+                    message = "Employee is not Created";
+                    return View("Error", message);
+                }
+            }
+        }
+        [HttpGet]
+
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return BadRequest();
+            }
+            var employee = await _employesService.GetEmployesByIdAsynce(id.Value);
+            if (employee == null)
+
+            {
+                return NotFound();
+            }
+            return View(employee);
+        }
+
+        [HttpGet]
+
+        public async Task<IActionResult> Edit(int? id, [FromServices] IDepratmentService depratmentService)
+        {
 
 
             if (id is null)
-			{
-				return BadRequest();
-			}
+            {
+                return BadRequest();
+            }
 
 
-			var employee = await _employesService.GetEmployesByIdAsynce(id.Value);
+            var employee = await _employesService.GetEmployesByIdAsynce(id.Value);
 
 
             // Check if department exists
             if (employee == null)
-			{
-				return NotFound();  // Return 404 if the department is not found
-			}
+            {
+                return NotFound();  // Return 404 if the department is not found
+            }
 
             ViewData["Departments"] = await depratmentService.GetAllDepartmentsAsynce();
 
@@ -162,86 +162,86 @@ namespace LinkDev.IKEA.PL.Controllers
             // Pass the fetched department data to the view
             return View(new EmploeeViewModel
             {
-				//Id = employee.Id,
-				Name = employee.Name,
-			
-				Adress=employee.Adress,
-				Email=employee.Email,
-				Age=employee.Age,
-				Salary=employee.Salary,
-				HiringDate=employee.HiringDate,
-				IsActive=employee.IsActive,
-				PhoneNumber=employee.PhoneNumber,
-				EmployeeType=employee.EmployeeType,
-				Gender	=employee.Gender,
-				DepartmentId=employee.DepartmentId,
-				ImagePath=employee.Image,
+                //Id = employee.Id,
+                Name = employee.Name,
+
+                Adress = employee.Adress,
+                Email = employee.Email,
+                Age = employee.Age,
+                Salary = employee.Salary,
+                HiringDate = employee.HiringDate,
+                IsActive = employee.IsActive,
+                PhoneNumber = employee.PhoneNumber,
+                EmployeeType = employee.EmployeeType,
+                Gender = employee.Gender,
+                DepartmentId = employee.DepartmentId,
+                ImagePath = employee.Image,
 
 
-			});
-		}
+            });
+        }
         [ValidateAntiForgeryToken]
 
         [HttpPost]
 
-		public async Task <IActionResult> Edit([FromRoute] int id, EmploeeViewModel emploeeView)
-		{
+        public async Task<IActionResult> Edit([FromRoute] int id, EmploeeViewModel emploeeView)
+        {
 
 
             var employee = new UpdatedEmployeeDto()
-			{
-Adress=emploeeView.Adress,
-Age=emploeeView.Age,
-	DepartmentId=emploeeView.DepartmentId,
-	Email=emploeeView.Email,
-	EmployeeType	= emploeeView.EmployeeType,
-	Gender =emploeeView.Gender,
-	HiringDate =emploeeView.HiringDate,
-	IsActive=emploeeView.IsActive,
-		PhoneNumber=emploeeView.PhoneNumber,
-				Name=emploeeView.Name,
-					Id	=id,
-				Salary=emploeeView.Salary,
-				Image=emploeeView.Image,
-				ImagePath=emploeeView.ImagePath,
-			};
+            {
+                Adress = emploeeView.Adress,
+                Age = emploeeView.Age,
+                DepartmentId = emploeeView.DepartmentId,
+                Email = emploeeView.Email,
+                EmployeeType = emploeeView.EmployeeType,
+                Gender = emploeeView.Gender,
+                HiringDate = emploeeView.HiringDate,
+                IsActive = emploeeView.IsActive,
+                PhoneNumber = emploeeView.PhoneNumber,
+                Name = emploeeView.Name,
+                Id = id,
+                Salary = emploeeView.Salary,
+                Image = emploeeView.Image,
+                ImagePath = emploeeView.ImagePath,
+            };
 
-			if (!ModelState.IsValid)
-			{
-				return View(emploeeView);
-			}
-			var message = string.Empty;
-			try
-			{
+            if (!ModelState.IsValid)
+            {
+                return View(emploeeView);
+            }
+            var message = string.Empty;
+            try
+            {
 
-				var updated = await _employesService.UpdateEmployeAsynce(employee) > 0;
+                var updated = await _employesService.UpdateEmployeAsynce(employee) > 0;
 
 
                 if (updated)
-				{
-					TempData["Message"] = "Employee Is Updated";
-					return RedirectToAction(nameof(Index));
-				}
-				else
-				{
-					TempData["Message"] = "Employee Is Not Updated";
+                {
+                    TempData["Message"] = "Employee Is Updated";
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    TempData["Message"] = "Employee Is Not Updated";
 
 
 
-				}
+                }
 
-			}
-			catch (Exception ex)
-			{
+            }
+            catch (Exception ex)
+            {
 
-				_logger.LogError(ex, ex.Message);
+                _logger.LogError(ex, ex.Message);
 
-				message = _webHostEnvironment.IsDevelopment() ? ex.Message : "an error has occured during updating the employee";
+                message = _webHostEnvironment.IsDevelopment() ? ex.Message : "an error has occured during updating the employee";
 
-			}
-			ModelState.AddModelError(string.Empty, message);
-			return View(emploeeView);
-		}
+            }
+            ModelState.AddModelError(string.Empty, message);
+            return View(emploeeView);
+        }
         //[HttpGet]
         //public IActionResult Delete(int? id)
         //{
@@ -263,39 +263,39 @@ Age=emploeeView.Age,
         [HttpPost]
 
 
-		public async Task <IActionResult> Delete(int id)
-		{
-			var message = string.Empty;
+        public async Task<IActionResult> Delete(int id)
+        {
+            var message = string.Empty;
 
-			try
-			{
-				var employee = await _employesService.DeleteEmployeAsynce(id);
-				if (employee)
+            try
+            {
+                var employee = await _employesService.DeleteEmployeAsynce(id);
+                if (employee)
 
-				{
-					TempData["Message"] = "Employee Is Deleted";
-					return RedirectToAction(nameof(Index));
-				}
-				else
-				{
-					TempData["Message"] = "Employee Is Not Deleted";
+                {
+                    TempData["Message"] = "Employee Is Deleted";
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    TempData["Message"] = "Employee Is Not Deleted";
 
-					message = "an error has occured during deleting the emploee";
+                    message = "an error has occured during deleting the emploee";
 
-				}
-			}
-			catch (Exception ex)
-			{
+                }
+            }
+            catch (Exception ex)
+            {
 
-				_logger.LogError(ex, ex.Message);
+                _logger.LogError(ex, ex.Message);
 
-				message = _webHostEnvironment.IsDevelopment() ? ex.Message : "an error has occured during deleting the emploee";
-			}
-			//ModelState.AddModelError(string.Empty, message);
+                message = _webHostEnvironment.IsDevelopment() ? ex.Message : "an error has occured during deleting the emploee";
+            }
+            //ModelState.AddModelError(string.Empty, message);
 
-			// shoud use torser and use tempedata[]
-			return RedirectToAction(nameof(Index));
+            // shoud use torser and use tempedata[]
+            return RedirectToAction(nameof(Index));
 
-		}
-	}
+        }
+    }
 }
