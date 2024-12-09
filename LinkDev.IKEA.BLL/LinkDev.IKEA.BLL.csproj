@@ -7,11 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LinkDev.IKEA.DAL\LinkDev.IKEA.DAL.csproj" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Servcies\" />
+    <ProjectReference Include="..\LinkDev.IKEA.DAL\LinkDev.IKEA.DAL.csproj" />
   </ItemGroup>
 
 </Project>

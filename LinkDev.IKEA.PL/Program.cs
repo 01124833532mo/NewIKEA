@@ -1,3 +1,19 @@
+using Link.Dev.IKEA.BLL.Services.Departments;
+using Link.Dev.IKEA.DAL.Data;
+using Link.Dev.IKEA.DAL.Persistence.Repositories.Departments;
+using LinkDev.IKEA.BLL.Common.Services.Attachments;
+using LinkDev.IKEA.BLL.Servcies.Employees;
+using LinkDev.IKEA.DAL.Persistance.Repositories.Employees;
+using LinkDev.IKEA.DAL.Persistance.UnitOfWork;
+using LinkDev.IKEA.PL.Mapping;
+using Microsoft.EntityFrameworkCore;
+using LinkDev.IKEA.BLL.Common.Services.Attachments;
+using Microsoft.AspNetCore.Identity;
+using LinkDev.IKEA.DAL.Entites.Identity;
+using LinkDev.IKEA.PL.Settings;
+using LinkDev.IKEA.PL.Helpers;
+
+
 namespace LinkDev.IKEA.PL
 {
     public class Program
@@ -7,9 +23,81 @@ namespace LinkDev.IKEA.PL
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            
             builder.Services.AddControllersWithViews();
 
-            var app = builder.Build();
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+            {
+                options.UseLazyLoadingProxies().UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+            });
+			//
+			//builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+			//builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+			builder.Services.AddScoped<IDepratmentService, DepartmentService>();
+
+
+			builder.Services.AddScoped<IEmployesService, EmployeeService>();
+
+            builder.Services.AddTransient<IAttachmentService, AttachmentService>();
+
+            builder.Services.AddAutoMapper(m=> m.AddProfile(new MappingProfile()));
+
+
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>((options) => {
+                options.Password.RequiredLength = 5;
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireUppercase = true;
+
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequiredUniqueChars = 1;
+
+                options.User.RequireUniqueEmail = true;
+
+                options.Lockout.AllowedForNewUsers = true;
+
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                 
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromDays(5);
+
+            }).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+
+
+            // configyration on cookeis
+            builder.Services.ConfigureApplicationCookie(options => {
+
+                options.LoginPath = "/Account/SignIn";
+                options.AccessDeniedPath = "/Home/Error";
+            options.ExpireTimeSpan = TimeSpan.FromDays(1);
+
+                //options.LogoutPath = "/Account/SignIn";
+                //options.ForwardSignOut = "/Account/SignIn";
+
+			});
+
+
+            builder.Services.AddAuthentication(options => {
+
+                options.DefaultAuthenticateScheme = "Identity.Application";
+                options.DefaultChallengeScheme = "Identity.Application";
+
+
+			}).AddCookie("Hamda",".AsodotNet.Hamada",options => {
+
+				options.LoginPath = "/Account/LogIn";
+				options.AccessDeniedPath = "/Home/Error";
+				options.ExpireTimeSpan = TimeSpan.FromDays(1);
+
+				options.LogoutPath = "/Account/SignIn";
+			}) ;
+
+
+            builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
+			builder.Services.AddTransient<IMailSettings, EmailSettings>();
+
+			var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
@@ -23,6 +111,8 @@ namespace LinkDev.IKEA.PL
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseAuthorization();
 

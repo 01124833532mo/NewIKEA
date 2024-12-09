@@ -1,0 +1,95 @@
+﻿ @model DepartmentViewModel
+
+ @inject IEmployesService _employeeservices
+
+@{
+	string temp = string.Empty;
+	var Employees = new SelectList(await _employeeservices.GetEmployesAsynce(temp), nameof(EmployeeToReturnDto.Id), nameof(EmployeeToReturnDto.Name));
+
+
+}
+
+<form asp-action="@ViewBag.Action" method="post" class="col-8">
+
+
+	<div asp-validation-summary="ModelOnly"></div>
+
+	<div class=" form-group mb-3">
+
+		<label class="form-label" asp-for="Code"></label>
+
+		<input asp-for="Code" class="form-control" />
+
+		<span asp-validation-for="Code" class="text-danger"></span>
+
+
+	</div>
+
+	<div class=" form-group mb-3">
+
+		<label class="form-label" asp-for="Name"></label>
+
+		<input asp-for="Name" class="form-control" />
+
+		<span asp-validation-for="Name" class="text-danger"></span>
+
+
+	</div>
+
+	
+
+
+
+	<div class=" form-group mb-3">
+
+		<label class="form-label" asp-for="Description"></label>
+
+		<textarea asp-for="Description" class="form-control"></textarea>
+
+	</div>
+
+	<div>
+
+		<label class="form-group mb-3" for="DateOfCreation"> Date Of Creation </label>
+
+		<input type="date" asp-for="CreationDate" class="form-control" />
+
+	</div>
+
+
+	<div class="col-sm-6 mb-3">
+		<label class="form-label" asp-for="MangerId"></label>
+		<select asp-for="MangerId" aria-label="Disabled select example" asp-items="@Employees" class="form-control">
+			<option value="@null">Choose..</option>
+
+		</select>
+	</div>
+
+	
+
+	@if (ViewBag.Action == "Create")
+
+	{
+		<div class="mt-4 ">
+
+			<input type="submit" value="@ViewBag.Action" class="btn btn-primary" /> |
+
+			<a asp-action="Index" class="btn btn-dark">Back to List</a>
+
+		</div>
+
+	}
+	else
+	{
+		<div class="mt-4 ">
+
+			<input type="submit" value="@ViewBag.Action" class="btn btn-primary" /> |
+
+			<a asp-action="Index" class="btn btn-dark">Back to List</a>
+
+		</div>
+
+
+	}
+
+</form> 
