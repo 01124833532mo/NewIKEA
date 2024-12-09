@@ -31,8 +31,6 @@ The application implements key design patterns like Generic Repository and Unit 
 ## License
 This project is licensed under the MIT License.
 
-## Contact
-[Visit GitHub]([https://github.com](https://github.com/01124833532mo))
-[Visit Email]([mohammedhamdi726@gmail.com))
+
 
 
