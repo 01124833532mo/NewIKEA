@@ -6,7 +6,7 @@ namespace LinkDev.IKEA.PL.ViewModels
     public class DepartmentViewModel
     {
 
-        //public int Id { get; set; }
+        public int Id { get; set; }
         //public int CreatedBy { get; set; }
         //public DateTime CreateOn { get; set; }
         //public int LastModifiedBy { get; set; }
@@ -21,5 +21,9 @@ namespace LinkDev.IKEA.PL.ViewModels
         public string? Description { get; set; }
         [Display(Name = "Creation of Date")]
         public DateOnly CreationDate { get; set; }
-    }
+		[Display(Name = "Manger Name")]
+
+		public int MangerId { get; set; }
+
+	}
 }

@@ -25,6 +25,18 @@ namespace LinkDev.IKEA.DAL.Persistance.Data.Configurations.Departments
                 .HasForeignKey(p => p.DepartmentId)
                 .OnDelete(DeleteBehavior.SetNull);
 
+
+            builder.Property(p => p.MangerId).IsRequired(false);
+
+            //builder.HasOne(p => p.Manger).WithOne(p => p.DepartmentManger)
+            //    .HasForeignKey<Department>(p => p.MangerId).OnDelete(DeleteBehavior.SetNull);
+
+    //        builder.HasOne(p => p.Manger)
+    //.WithOne(p => p.DepartmentManger)
+    //.HasForeignKey<Department>(p => p.MangerId)
+    //.IsRequired()
+    //.OnDelete(DeleteBehavior.Restrict);  // Use Restrict or Cascade depending on your business logic
+
         }
     }
 }

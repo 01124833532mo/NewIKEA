@@ -52,13 +52,14 @@ namespace Link.Dev.IKEA.BLL.Services.Departments
 
 
 
-            var Departments2 = await _unitOfWork.DepartmentRepository.GetAllAsIQueryable().Where(d => !d.IsDeleted).Select(D => new DepartmentToReturnDto
+            var Departments2 = await _unitOfWork.DepartmentRepository.GetAllAsIQueryable().Include(p=>p.Manger).Where(d => !d.IsDeleted).Select(D => new DepartmentToReturnDto
             {
                 Id = D.Id,
                 Code = D.Code,
                 Name = D.Name,
                 Description = D.Description,
                 CreationDate = D.CreationDate,
+                Manger = D.Manger.Name,
             }).AsNoTracking().ToListAsync();
 
             return  Departments2;
@@ -92,47 +93,107 @@ namespace Link.Dev.IKEA.BLL.Services.Departments
                     CreatedBy = department.CreatedBy,
                     CreateOn = department.CreatedOn,
                     LastModifiedBy = department.LastModifiedBy,
-                    LastModifiedOn = department.LastModifiedOn
+                    LastModifiedOn = department.LastModifiedOn,
+                    Manger = department.Manger.Name,
+                    MangerId = department.MangerId,
                 };
             return null;
         }
 
-        public async Task< int> CreateDepartmentAsynce(CreatedDepartmentDto DepartmentDto)
+        //public async Task< int> CreateDepartmentAsynce(CreatedDepartmentDto DepartmentDto)
 
+        //{
+        //    var department = new Department
+        //    {
+        //        Code = DepartmentDto.Code,
+        //        Name = DepartmentDto.Name,
+        //        Description = DepartmentDto.Description,
+        //        CreationDate = DepartmentDto.CreationDate,
+        //        CreatedBy = 1,
+        //        LastModifiedBy = 1,
+        //        MangerId=DepartmentDto.MangerId
+        //        //LastModifiedOn = DepartmentDto.LastModifiedOn,
+        //    };
+        //     _unitOfWork.DepartmentRepository.Add(department);
+        //    return await _unitOfWork.CompleteAsynce();
+        //}
+
+        public async Task<int> CreateDepartmentAsynce(CreatedDepartmentDto departmentDto)
         {
+            // Check if the MangerId already exists in the Departments table
+            var existingDepartment = await _unitOfWork.DepartmentRepository
+                .GetAllAsIQueryable()
+                .AnyAsync(d => d.MangerId == departmentDto.MangerId && !d.IsDeleted);
+
+            if (existingDepartment)
+            {
+
+                throw new InvalidOperationException("This manager is already assigned to another department.");
+            }
+
             var department = new Department
             {
-                Code = DepartmentDto.Code,
-                Name = DepartmentDto.Name,
-                Description = DepartmentDto.Description,
-                CreationDate = DepartmentDto.CreationDate,
+                Code = departmentDto.Code,
+                Name = departmentDto.Name,
+                Description = departmentDto.Description,
+                CreationDate = departmentDto.CreationDate,
                 CreatedBy = 1,
                 LastModifiedBy = 1,
-                //LastModifiedOn = DepartmentDto.LastModifiedOn,
+                MangerId = departmentDto.MangerId
             };
-             _unitOfWork.DepartmentRepository.Add(department);
+
+            _unitOfWork.DepartmentRepository.Add(department);
             return await _unitOfWork.CompleteAsynce();
         }
 
-        public async Task< int> UpdateDepartmentAsynce(UpdatedDepartmentDto DepartmentDto)
 
+
+        //public async Task< int> UpdateDepartmentAsynce(UpdatedDepartmentDto DepartmentDto)
+
+        //{
+        //    var department = new Department
+        //    {
+        //        //Id = DepartmentDto.Id,
+        //        Code = DepartmentDto.Code,
+        //        Name = DepartmentDto.Name,
+        //        Description = DepartmentDto.Description,
+        //        CreationDate = DepartmentDto.CreationDate,
+        //        MangerId=DepartmentDto.MangerId
+        //        //CreatedBy = 1,
+        //        //LastModifiedBy = 1,
+        //        //LastModifiedOn = DepartmentDto.LastModifiedOn,
+
+
+
+        //    };
+        //     _unitOfWork.DepartmentRepository.Update(department);
+
+        //    return await _unitOfWork.CompleteAsynce();
+        //}
+
+        public async Task<int> UpdateDepartmentAsynce(UpdatedDepartmentDto departmentDto)
         {
+            // Check if the MangerId already exists in the Departments table
+            var existingDepartment = await _unitOfWork.DepartmentRepository
+                .GetAllAsIQueryable()
+                .AnyAsync(d => d.MangerId == departmentDto.MangerId && d.Id != departmentDto.Id && !d.IsDeleted);
+
+            if (existingDepartment)
+            {
+                throw new InvalidOperationException("This manager is already assigned to another department.");
+            }
+
             var department = new Department
             {
-                Id = DepartmentDto.Id,
-                Code = DepartmentDto.Code,
-                Name = DepartmentDto.Name,
-                Description = DepartmentDto.Description,
-                CreationDate = DepartmentDto.CreationDate,
-                //CreatedBy = 1,
-                //LastModifiedBy = 1,
-                //LastModifiedOn = DepartmentDto.LastModifiedOn,
-
-
-
+                Id = departmentDto.Id,
+                Code = departmentDto.Code,
+                Name = departmentDto.Name,
+                Description = departmentDto.Description,
+                CreationDate = departmentDto.CreationDate,
+                MangerId = departmentDto.MangerId
             };
-             _unitOfWork.DepartmentRepository.Update(department);
 
+            _unitOfWork.DepartmentRepository.Update(department);
             return await _unitOfWork.CompleteAsynce();
         }
 
@@ -142,9 +203,12 @@ namespace Link.Dev.IKEA.BLL.Services.Departments
             var DepartmentUnit = _unitOfWork.DepartmentRepository;
 
             var department = await DepartmentUnit.GetByIdAsynce(id);
+
             if (department is not null)
             {
-                var employess = _unitOfWork.EmployeeRepository.GetAllAsIQueryable().Where(e => e.Department == department);
+                department.MangerId = null;
+
+                var employess = _unitOfWork.EmployeeRepository.GetAllAsIQueryable().Where(e => e.DepartmentId == department.Id).ToList();
 
                 foreach (var employee  in employess)
                 {
@@ -156,5 +220,6 @@ namespace Link.Dev.IKEA.BLL.Services.Departments
             }
             return false;
         }
+      
     }
 }

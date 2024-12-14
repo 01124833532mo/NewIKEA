@@ -65,7 +65,8 @@ namespace LinkDev.IKEA.PL.Controllers
                 }
                 else
                 {
-					message = "Department is not created";
+
+                    message = "Department is not created";
 					ModelState.AddModelError(string.Empty, message);
 					return View(department);
                    
@@ -111,7 +112,7 @@ namespace LinkDev.IKEA.PL.Controllers
 
         [HttpGet]
 
-        public async Task <IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
 
         {
 
@@ -131,6 +132,7 @@ namespace LinkDev.IKEA.PL.Controllers
             // Pass the fetched department data to the view
             return View(departmentvm);
         }
+
         [ValidateAntiForgeryToken]
 
         [HttpPost]

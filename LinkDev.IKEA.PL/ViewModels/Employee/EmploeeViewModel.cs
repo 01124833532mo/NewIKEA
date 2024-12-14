@@ -36,5 +36,9 @@ namespace LinkDev.IKEA.PL.ViewModels.Employee
         public int? DepartmentId { get; set; }
         public IFormFile? Image { get; set; }
 
+        [Display(Name ="Your Image")]
+        public string? ImagePath { get; set; }
+
+
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,5 +17,11 @@ namespace Link.Dev.IKEA.BLL.Models.Departments
         public string Name { get; set; } = null!;
         public string? Description { get; set; }
         public DateOnly CreationDate { get; set; }
+
+
+        [Display(Name = "Manger Name")]
+
+        public int MangerId { get; set; }
+
     }
 }

@@ -44,5 +44,8 @@ namespace LinkDev.IKEA.BLL.Models.Employees
 
         public IFormFile? Image { get; set; }
 
+        public string? ImagePath { get; set; }
+
+
     }
 }

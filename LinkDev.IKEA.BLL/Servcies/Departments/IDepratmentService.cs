@@ -20,5 +20,6 @@ namespace Link.Dev.IKEA.BLL.Services.Departments
 
        Task <bool> DeleteDepartmentAsynce(int id);
 
+
     }
 }

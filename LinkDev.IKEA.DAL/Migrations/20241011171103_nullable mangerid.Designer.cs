@@ -4,16 +4,19 @@ using Link.Dev.IKEA.DAL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace LinkDev.IKEA.DAL.Persistance.Data.Migrations
+namespace LinkDev.IKEA.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241011171103_nullable mangerid")]
+    partial class nullablemangerid
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -62,11 +65,18 @@ namespace LinkDev.IKEA.DAL.Persistance.Data.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETDATE()");
 
+                    b.Property<int?>("MangerId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("varchar(50)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MangerId")
+                        .IsUnique()
+                        .HasFilter("[MangerId] IS NOT NULL");
 
                     b.ToTable("Departments");
                 });
@@ -352,6 +362,16 @@ namespace LinkDev.IKEA.DAL.Persistance.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("LinkDev.IKEA.DAL.Entites.Departments.Department", b =>
+                {
+                    b.HasOne("LinkDev.IKEA.DAL.Entites.Employees.Employee", "Manger")
+                        .WithOne("DepartmentManger")
+                        .HasForeignKey("LinkDev.IKEA.DAL.Entites.Departments.Department", "MangerId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("Manger");
+                });
+
             modelBuilder.Entity("LinkDev.IKEA.DAL.Entites.Employees.Employee", b =>
                 {
                     b.HasOne("LinkDev.IKEA.DAL.Entites.Departments.Department", "Department")
@@ -416,6 +436,11 @@ namespace LinkDev.IKEA.DAL.Persistance.Data.Migrations
             modelBuilder.Entity("LinkDev.IKEA.DAL.Entites.Departments.Department", b =>
                 {
                     b.Navigation("Employess");
+                });
+
+            modelBuilder.Entity("LinkDev.IKEA.DAL.Entites.Employees.Employee", b =>
+                {
+                    b.Navigation("DepartmentManger");
                 });
 #pragma warning restore 612, 618
         }

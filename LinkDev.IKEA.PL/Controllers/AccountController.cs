@@ -1,4 +1,6 @@
-﻿using LinkDev.IKEA.DAL.Entites.Identity;
+﻿using LinkDev.IKEA.DAL.Entites;
+using LinkDev.IKEA.DAL.Entites.Identity;
+using LinkDev.IKEA.PL.Helpers;
 using LinkDev.IKEA.PL.ViewModels.Identity;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
@@ -10,11 +12,13 @@ namespace LinkDev.IKEA.PL.Controllers
 	{
 		private readonly UserManager<ApplicationUser> _userManager;
 		private readonly SignInManager<ApplicationUser> _signInManager;
+		private readonly IMailSettings _mailSettings;
 
-		public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+		public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager,IMailSettings mailSettings)
         {
 			_userManager = userManager;
 			_signInManager = signInManager;
+			_mailSettings = mailSettings;
 		}
 
         [HttpGet]
@@ -113,6 +117,114 @@ namespace LinkDev.IKEA.PL.Controllers
 
 		return	RedirectToAction(nameof(SignIn));
 		}
+
+		public IActionResult ForgetPassword()
+		{
+			return View();
+		}
+
+		//[HttpPost]
+		//public async Task<IActionResult> ForgetPassword(ForgetPasswordViewModel viewModel)
+		//{
+		//	if (ModelState.IsValid)
+		//	{
+		//		var user = await _userManager.FindByEmailAsync(viewModel.Email);
+		//		if (user is not null)
+		//		{
+		//			var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+		//			var ResetPasswordUrl = Url.Action("ResetPassword", "Account", new { email = viewModel.Email , token=token });
+
+		//			var email = new Email()
+		//			{
+		//				Subject = "Reset Your Password",
+		//				Reciepints = viewModel.Email,
+		//				Body = ResetPasswordUrl!
+		//			};
+
+		//			_mailSettings.SendEmail(email); 
+
+		//			return RedirectToAction(nameof(ChekYourInbox));
+
+		//			// ... (rest of the code)
+		//		}
+		//		ModelState.AddModelError(string.Empty, "Invalid Email");
+		//	}
+		//	return View(viewModel);
+		//}
+
+
+		[HttpPost]
+		public async Task<IActionResult> ForgetPassword(ForgetPasswordViewModel viewModel)
+		{
+			if (ModelState.IsValid)
+			{
+				var user = await _userManager.FindByEmailAsync(viewModel.Email);
+				if (user is not null)
+				{
+					var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+					// Generate the absolute URL with host and scheme specified
+					var resetPasswordUrl = Url.Action("ResetPassword", "Account",
+						new { email = viewModel.Email, token = token },
+						protocol: Request.Scheme,
+						host: Request.Host.ToString());
+
+					var email = new Email()
+					{
+						Subject = "Reset Your Password",
+						Reciepints = viewModel.Email,
+						Body = resetPasswordUrl!
+					};
+
+					_mailSettings.SendEmail(email);
+
+					return RedirectToAction(nameof(ChekYourInbox));
+				}
+				ModelState.AddModelError(string.Empty, "Invalid Email");
+			}
+			return View(viewModel);
+		}
+
+
+		public IActionResult ChekYourInbox()
+		{
+			return View();
+		}
+
+
+		public IActionResult ResetPassword(string email,string token)
+		{
+			TempData["email"] = email;
+			TempData["token"] = token;
+			return View();
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> ResetPassword(ResetPasswordViewModel viewModel)
+		{
+			if (ModelState.IsValid)
+			{
+				var email = TempData["email"] as string;
+
+				var token = TempData["token"] as string;
+				var user = await _userManager.FindByEmailAsync(email!);
+				var result = await _userManager.ResetPasswordAsync(user, token, viewModel.Password);
+
+				if (result.Succeeded)
+				{
+					return RedirectToAction(nameof(SignIn));
+				}
+
+				foreach (var item in result.Errors)
+				{
+					ModelState.AddModelError(string.Empty, item.Description);
+				}
+
+			}
+			return View(viewModel);
+
+		}
+
 
 	}
 }
